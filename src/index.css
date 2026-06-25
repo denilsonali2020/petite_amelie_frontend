@@ -1,0 +1,11 @@
+@import "tailwindcss";
+
+/* Definimos variables CSS dentro de @theme */
+@theme {
+  --font-roboto: "Roboto", ui-sans-serif, system-ui;
+}
+
+/* Clase utilitaria para usar la fuente Roboto */
+.font-roboto {
+  font-family: var(--font-roboto);
+}
