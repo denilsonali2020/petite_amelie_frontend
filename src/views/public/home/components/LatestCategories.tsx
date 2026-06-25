@@ -10,7 +10,7 @@ export default function LatestCategories() {
 
   if (isLoading) return "";
 
-//   if (isError) return <Navigate to={"/404"} />;
+  if (isError) return <Navigate to={"/404"} />;
 
   if (data)
     return (
@@ -33,7 +33,7 @@ export default function LatestCategories() {
                 className="group relative min-h-75 overflow-hidden rounded-xs bg-neutral-900"
               >
                 <img
-                  src={category.imageURL}
+                  src={category.imageURL || ""}
                   alt={category.name}
                   className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />
