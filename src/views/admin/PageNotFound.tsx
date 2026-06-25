@@ -29,7 +29,7 @@ export default function PageNotFound() {
         </p>
         <div className="mt-10 flex justify-center">
           <Link
-            to="/admin/dashboard"
+            to="/petite-amelie"
             className="rounded-full bg-white/10 px-6 py-2.5 text-sm font-semibold text-white shadow-sm backdrop-blur-md ring-1 ring-inset ring-white/20 hover:bg-white/20 transition-all active:scale-95"
           >
             <span aria-hidden="true" className="mr-2">
