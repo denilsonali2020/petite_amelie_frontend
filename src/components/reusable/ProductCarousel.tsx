@@ -1,6 +1,5 @@
 import { useRef } from "react";
 import { ChevronRightIcon, ChevronLeftIcon } from "@heroicons/react/24/outline";
-import { Link } from "react-router-dom";
 import ProductCard from "@/components/reusable/ProductCard";
 import type { ProductCardCarouselType } from "@/views/public/home/types";
 
@@ -16,7 +15,6 @@ interface ProductCarouselProps {
 export default function ProductCarousel({
   title,
   subtitle,
-  viewAllLink,
   products = [],
   isLoading = false,
   isError = false,
@@ -51,15 +49,6 @@ export default function ProductCarousel({
         </div>
 
         <div className="flex items-center gap-4">
-          {viewAllLink && (
-            <Link
-              to={viewAllLink}
-              className="border-b border-black pb-0.5 text-xs font-bold uppercase tracking-wider text-neutral-900 transition-colors hover:text-neutral-600"
-            >
-              Ver todo
-            </Link>
-          )}
-
           <div className="hidden items-center gap-1.5 sm:flex">
             <button
               onClick={() => scroll("left")}

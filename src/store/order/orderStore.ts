@@ -21,6 +21,8 @@ type OrderState = {
   orderBillingInfo: orderBillingInfoType;
   items: orderItemsType[];
   shippingDetails: shippingDetailsType;
+  orderSuccess: boolean;
+  toggleOrderSuccess: () => void;
 
   clearBillingInfo: () => void;
   addCustomerInfo: (data: orderBillingInfoType) => void;
@@ -48,6 +50,7 @@ export const useOrderStore = create<OrderState>()(
     },
     items: [],
     shippingDetails: initialShippingDetails,
+    orderSuccess: false,
 
     clearBillingInfo: () => {
       set(() => ({
@@ -129,5 +132,10 @@ export const useOrderStore = create<OrderState>()(
     clearItems: () => {
       set(() => ({ items: [] }));
     },
+    // to reset the form when order has been despatch
+    toggleOrderSuccess: () =>
+      set((state) => ({
+        orderSuccess: !state.orderSuccess,
+      })),
   })),
 );

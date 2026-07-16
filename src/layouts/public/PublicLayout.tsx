@@ -72,7 +72,7 @@ export default function PublicLayout() {
   if (isLoading) return <p>Cargando...</p>;
 
   if (isError) return <Navigate to={"/404"} />;
-  
+
   if (data)
     return (
       <div className="bg-white min-h-screen flex flex-col antialiased text-black font-sans">
@@ -172,7 +172,7 @@ export default function PublicLayout() {
                 Novedades
               </Link>
               <Link
-                to="#"
+                to="/mas-vendidos"
                 className="border border-transparent hover:border-black px-2.5 py-1.5 rounded-xs transition-all hover:text-black"
               >
                 Más Vendidos

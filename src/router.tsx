@@ -40,6 +40,7 @@ import RequireRole from "./components/guards/RequireRole";
 import PublicLayout from "./layouts/public/PublicLayout";
 import HomeView from "./views/public/home/views/HomeView";
 import NewArrivalsView from "./views/public/home/views/NewArrivalsView";
+import BestSellersView from "./views/public/home/views/BestSellersView";
 
 const ROLES = {
   OWNER: "OWNER",
@@ -83,6 +84,7 @@ export default function Router() {
         <Route element={<PublicLayout />}>
           <Route path="/petite-amelie" element={<HomeView />} index />
           <Route path="/novedades" element={<NewArrivalsView />} />
+          <Route path="/mas-vendidos" element={<BestSellersView />} />
         </Route>
 
         {/* ==========================================================

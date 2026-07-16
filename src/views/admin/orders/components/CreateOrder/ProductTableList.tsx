@@ -27,6 +27,9 @@ export default function ProductTableList() {
                 <th className="py-2.5 px-3 text-[11px] font-bold text-gray-400 uppercase tracking-wider">
                   Producto
                 </th>
+                <th className="py-2.5 px-3 text-[11px] font-bold text-gray-400 uppercase tracking-wider">
+                  Stock
+                </th>
                 <th className="py-2.5 px-3 text-[11px] font-bold text-gray-400 uppercase tracking-wider text-right">
                   Precio Unit.
                 </th>
@@ -67,6 +70,9 @@ export default function ProductTableList() {
                       </td>
                       <td className="py-2 px-3 text-[13px] font-semibold text-slate-800">
                         {item.name}
+                      </td>
+                      <td className="py-2 px-3 text-[13px] font-semibold text-slate-800">
+                        {item.stock}
                       </td>
                       <td className="py-2 px-3 text-[13px] text-right">
                         <div className="flex flex-col items-end">

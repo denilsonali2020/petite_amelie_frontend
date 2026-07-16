@@ -139,6 +139,7 @@ export const getProductOrderSchema = globalProductSchema.pick({
   uuid: true,
   sku: true,
   name: true,
+  stock: true,
   price: true,
   discountPrice: true,
   isOnDiscount: true,

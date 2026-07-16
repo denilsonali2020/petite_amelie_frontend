@@ -12,6 +12,7 @@ import ProductTableList from "../components/CreateOrder/ProductTableList";
 import { paymentMethodsTranslation } from "@/locales/es";
 import { useNavigate, useLocation } from "react-router-dom"; // NUEVO: importamos hooks de enrutamiento
 import VendorAuthModal from "../components/CreateOrder/VendorAuthModal";
+import { useEffect } from "react";
 
 const PAYMENT_METHODS = ["CASH", "TRANSFER", "CARD"];
 
@@ -19,6 +20,7 @@ const CreateOrderView = () => {
   const user = useAuthStore((state) => state.user);
   const orderBillingInfo = useOrderStore((state) => state.orderBillingInfo);
   const addCustomerInfo = useOrderStore((state) => state.addCustomerInfo);
+  const orderSuccess = useOrderStore((state) => state.orderSuccess);
   const items = useOrderStore((state) => state.items);
 
   const navigate = useNavigate();
@@ -28,6 +30,7 @@ const CreateOrderView = () => {
     register,
     handleSubmit,
     watch,
+    reset,
     formState: { errors },
   } = useForm<CreateOrderForm>({
     defaultValues: {
@@ -38,6 +41,11 @@ const CreateOrderView = () => {
       country: "",
     },
   });
+
+  //resetear el formulario cada vez cambie orderSuccess
+  useEffect(() => {
+    reset();
+  }, [orderSuccess]);
 
   const requiresShipping = watch("requiresShipping");
   const shippingCost = watch("shippingCost") || 0;
@@ -51,7 +59,6 @@ const CreateOrderView = () => {
   const tax = totalProducts - subtotal;
   const total = totalProducts + (requiresShipping ? Number(shippingCost) : 0);
 
-  // NUEVO: La función onSubmit ahora solo abre el modal
   const onSubmit = () => {
     if (items.length === 0) {
       toast.error("Debes agregar al menos un producto a la venta.", {
@@ -117,10 +124,11 @@ const CreateOrderView = () => {
               <ErrorMessage>{errors.billingRTN.message}</ErrorMessage>
             )}
           </div>
-
+          {/* COMPONENTE DE BUSCAR PRODUCTOS */}
           <SearchProduct />
         </div>
 
+        {/* COMPONENTE DE LISTA DE PRODUCTOS */}
         <ProductTableList />
 
         {/* SECCIÓN INFERIOR */}
@@ -211,7 +219,7 @@ const CreateOrderView = () => {
         </div>
       </div>
 
-      {/* NUEVO: Componente Modal Montado */}
+      {/* Componente Modal Montado */}
       <VendorAuthModal />
     </div>
   );

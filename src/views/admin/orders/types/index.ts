@@ -155,6 +155,7 @@ export type orderItemsType = {
   uuid: string;
   sku: string;
   name: string;
+  stock: number;
   price: number;
   discountPrice: number;
   isOnDiscount: boolean;

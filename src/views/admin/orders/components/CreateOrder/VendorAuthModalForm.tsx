@@ -22,6 +22,7 @@ export default function VendorAuthModalForm({
   const generateFinalOrder = useOrderStore((state) => state.generateFinalOrder);
   const clearBillingInfo = useOrderStore((state) => state.clearBillingInfo);
   const clearItems = useOrderStore((state) => state.clearItems);
+  const toggleOrderSuccess = useOrderStore((state) => state.toggleOrderSuccess);
   //   const queryClient = useQueryClient();
 
   const {
@@ -58,7 +59,8 @@ export default function VendorAuthModalForm({
       clearItems();
       reset();
       closeModal();
-      //   queryClient.invalidateQueries({ queryKey: ["orders"] });
+      toggleOrderSuccess();
+      //   queryClient.invalidsateQueries({ queryKey: ["orders"] });
     },
   });
 

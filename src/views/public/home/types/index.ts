@@ -37,6 +37,24 @@ export const latestSubCategoriesSchema = z.array(
   }),
 );
 
+//schema of getBestSellersPerTopCategories
+export const getBestSellersPerTopCategoriesSchema = z.array(
+  z.object({
+    name: z.string(),
+    products: z.array(
+      z.object({
+        uuid: z.string(),
+        name: z.string(),
+        description: z.string(),
+        price: z.number(),
+        isOnDiscount: z.boolean(),
+        discountPrice: z.number(),
+        images: z.string(),
+      }),
+    ),
+  }),
+);
+
 export type ProductCardCarouselType = z.infer<typeof newArrivalsSchema>;
 
 //type de un cardproduct reutilizable
