@@ -587,7 +587,7 @@ export default function BestSellersView() {
   if (isError) return <Navigate to={"/404"} />;
 
   if (data) {
-    const firstCategories = data.slice(0, 3);
+    // const firstCategories = data.slice(0, 3);
   }
 
   return (
