@@ -54,6 +54,7 @@ export const getBestSellersPerTopCategoriesSchema = z.array(
     ),
   }),
 );
+export type getBestSellersPerTopCategoriesType = z.infer<typeof getBestSellersPerTopCategoriesSchema>
 
 export type ProductCardCarouselType = z.infer<typeof newArrivalsSchema>;
 

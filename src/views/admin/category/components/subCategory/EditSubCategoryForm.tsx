@@ -35,6 +35,7 @@ export default function EditSubCategoryForm({
   } = useForm<updateSubCategoryType>({
     defaultValues: {
       name: data.name,
+      description: data.description,
       position: data.position,
       imageURL: data.imageURL,
     },
@@ -78,12 +79,13 @@ export default function EditSubCategoryForm({
   const handleForm = (formData: updateSubCategoryType) => {
     const dataToSend = new FormData();
     dataToSend.append("name", formData.name);
-    
+    dataToSend.append("description", String(formData.description));
+
     // Agregamos la posición como número
     dataToSend.append("position", String(formData.position || 0));
 
     const imageField = formData.imageURL;
-    
+
     if (imageField instanceof FileList && imageField.length > 0) {
       dataToSend.append("image", imageField[0]);
     } else if (typeof imageField === "string") {
@@ -100,7 +102,6 @@ export default function EditSubCategoryForm({
 
   return (
     <form onSubmit={handleSubmit(handleForm)} className="space-y-8" noValidate>
-      
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* INPUT NAME */}
         <div className="group md:col-span-2">
@@ -141,8 +142,49 @@ export default function EditSubCategoryForm({
               min: { value: 0, message: "Mínimo 0" },
             })}
           />
-          {errors.position && <ErrorMessage>{errors.position.message}</ErrorMessage>}
+          {errors.position && (
+            <ErrorMessage>{errors.position.message}</ErrorMessage>
+          )}
         </div>
+      </div>
+
+      {/* INPUT DESCRIPTION - NUEVO CAMPO */}
+      <div className="group">
+        <div className="flex justify-between items-center mb-1.5">
+          <label className="block text-[13px] font-medium text-slate-700 transition-colors group-focus-within:text-pink-600">
+            Descripción de la sub-categoría{" "}
+            <span className="text-slate-400 font-normal">(Opcional)</span>
+          </label>
+          <span className="text-[11px] text-slate-400">
+            Entre 50 y 90 caracteres
+          </span>
+        </div>
+        <textarea
+          rows={3}
+          className={`w-full rounded-lg border px-3 py-2.5 text-sm outline-none transition-all resize-none ${
+            errors.description
+              ? "border-red-300 focus:border-red-500 focus:ring-red-500/10"
+              : "border-slate-200 focus:border-pink-500 focus:bg-white focus:ring-pink-500/10"
+          }`}
+          placeholder="Añade un breve resumen para dar contexto y mejorar el SEO de esta colección..."
+          {...register("description", {
+            validate: (value) => {
+              // Permite que sea nulo, indefinido o un string vacío (opcional)
+              if (!value || value.trim() === "") return true;
+
+              // Validaciones de rango solo si contiene texto
+              if (value.length < 50)
+                return "La descripción debe tener al menos 50 caracteres";
+              if (value.length > 90)
+                return "La descripción no puede superar los 90 caracteres";
+
+              return true;
+            },
+          })}
+        />
+        {errors.description && (
+          <ErrorMessage>{errors.description.message}</ErrorMessage>
+        )}
       </div>
 
       {/* SECCIÓN DE IMAGEN */}
@@ -153,13 +195,13 @@ export default function EditSubCategoryForm({
 
         <div
           className={`
-            flex flex-col sm:flex-row items-center gap-6 p-4 rounded-2xl border-2 border-dashed transition-colors
-            ${
-              errors.imageURL
-                ? "border-red-200 bg-red-50/50 hover:border-red-300"
-                : "border-slate-200 bg-slate-50/50 hover:border-pink-300"
-            }
-          `}
+        flex flex-col sm:flex-row items-center gap-6 p-4 rounded-2xl border-2 border-dashed transition-colors
+        ${
+          errors.imageURL
+            ? "border-red-200 bg-red-50/50 hover:border-red-300"
+            : "border-slate-200 bg-slate-50/50 hover:border-pink-300"
+        }
+      `}
         >
           {/* Preview */}
           <div className="relative h-32 w-32 shrink-0 overflow-hidden rounded-xl bg-white shadow-inner ring-1 ring-slate-200">
@@ -185,13 +227,13 @@ export default function EditSubCategoryForm({
 
             <label
               className={`
-                inline-flex cursor-pointer items-center gap-2 rounded-lg px-4 py-2 text-xs font-bold shadow-sm ring-1 transition-all active:scale-95
-                ${
-                  errors.imageURL
-                    ? "bg-red-100 text-red-600 ring-red-200 hover:bg-red-50"
-                    : "bg-white text-slate-700 ring-slate-200 hover:bg-slate-50 hover:ring-pink-300"
-                }
-              `}
+            inline-flex cursor-pointer items-center gap-2 rounded-lg px-4 py-2 text-xs font-bold shadow-sm ring-1 transition-all active:scale-95
+            ${
+              errors.imageURL
+                ? "bg-red-100 text-red-600 ring-red-200 hover:bg-red-50"
+                : "bg-white text-slate-700 ring-slate-200 hover:bg-slate-50 hover:ring-pink-300"
+            }
+          `}
             >
               <PhotoIcon
                 className={`h-4 w-4 ${
@@ -206,15 +248,33 @@ export default function EditSubCategoryForm({
                 {...register("imageURL", {
                   validate: {
                     fileSize: (value) => {
-                      if (typeof value === "string" || !value || value.length === 0) return true;
+                      if (
+                        typeof value === "string" ||
+                        !value ||
+                        value.length === 0
+                      )
+                        return true;
                       const file = value[0];
                       return file.size <= 5 * 1024 * 1024 || "Máximo 5MB";
                     },
                     fileType: (value) => {
-                      if (typeof value === "string" || !value || value.length === 0) return true;
+                      if (
+                        typeof value === "string" ||
+                        !value ||
+                        value.length === 0
+                      )
+                        return true;
                       const file = value[0];
-                      const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/webp", "image/avif"];
-                      return allowedTypes.includes(file.type) || "Formato no válido";
+                      const allowedTypes = [
+                        "image/jpeg",
+                        "image/jpg",
+                        "image/png",
+                        "image/webp",
+                        "image/avif",
+                      ];
+                      return (
+                        allowedTypes.includes(file.type) || "Formato no válido"
+                      );
                     },
                   },
                 })}
@@ -222,14 +282,20 @@ export default function EditSubCategoryForm({
             </label>
           </div>
         </div>
-        {errors.imageURL && <div className="mt-2"><ErrorMessage>{errors.imageURL.message}</ErrorMessage></div>}
+        {errors.imageURL && (
+          <div className="mt-2">
+            <ErrorMessage>{errors.imageURL.message}</ErrorMessage>
+          </div>
+        )}
       </div>
 
       {/* BOTONES */}
       <div className="flex items-center justify-end gap-3 border-t border-slate-100 pt-6">
         <button
           type="button"
-          onClick={() => navigate(`/admin/category/${rootCategoryId}/sub-categories`)}
+          onClick={() =>
+            navigate(`/admin/category/${rootCategoryId}/sub-categories`)
+          }
           className="text-sm font-semibold text-slate-500 hover:text-slate-800 px-4 py-2 cursor-pointer"
         >
           Cancelar
@@ -237,14 +303,22 @@ export default function EditSubCategoryForm({
 
         <button
           type="submit"
-          disabled={!isDirty && preview === (typeof data.imageURL === "string" ? data.imageURL : null)}
+          disabled={
+            !isDirty &&
+            preview ===
+              (typeof data.imageURL === "string" ? data.imageURL : null)
+          }
           className={`inline-flex items-center gap-2 rounded-lg px-8 py-2.5 text-sm font-bold text-white shadow-md transition-all active:scale-[0.98] ${
-            isDirty || preview !== (typeof data.imageURL === "string" ? data.imageURL : null)
+            isDirty ||
+            preview !==
+              (typeof data.imageURL === "string" ? data.imageURL : null)
               ? "bg-pink-600 hover:bg-pink-700 shadow-pink-200 cursor-pointer"
               : "bg-slate-300 cursor-not-allowed"
           }`}
         >
-          {isPending && <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />}
+          {isPending && (
+            <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+          )}
           {isPending ? "Procesando..." : "Guardar cambios"}
         </button>
       </div>

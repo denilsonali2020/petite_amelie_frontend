@@ -5,6 +5,7 @@ export const globalInventorySchema = z.object({
   id: z.number(),
   uuid: z.string(),
   name: z.string(),
+  description: z.string().nullable(),
   position: z.number(),
   imageURL: z.string().nullable(),
   parentId: z.string().nullable(),
@@ -28,6 +29,7 @@ export const createSubCategorySchema = z.object({
 // Schema para EDITAR / ACTUALIZAR (Acepta FileList o String)
 export const updateSubCategorySchema = z.object({
   name: z.string().min(1, "El nombre es obligatorio"),
+  description: z.string().nullable(),
   position: z.number(),
   imageURL: z
     .union([z.instanceof(FileList), z.string(), z.null()])
@@ -37,7 +39,7 @@ export const updateSubCategorySchema = z.object({
     }),
 });
 
-// --- SCHEMAS DE CONSULTA ---
+// --- SCHEMAS CONSULTA ---
 //Obtener todas las categoria raiz[]
 export const getRootCategoriesSchema = z.array(
   globalInventorySchema.pick({
@@ -54,6 +56,7 @@ export const getSubCategoriesByUuidSchema = z.object({
     globalInventorySchema.pick({
       uuid: true,
       name: true,
+      description: true,
       position: true,
       imageURL: true,
     }),
@@ -62,6 +65,7 @@ export const getSubCategoriesByUuidSchema = z.object({
 
 export const getCategorySchema = globalInventorySchema.pick({
   name: true,
+  description: true,
   position: true,
   imageURL: true,
 });
@@ -70,8 +74,8 @@ export const getCategorySchema = globalInventorySchema.pick({
 export type generalCategoryType = z.infer<typeof globalInventorySchema>;
 export type rootCategoriesType = z.infer<typeof getRootCategoriesSchema>;
 
-export type createRootCategory = Pick<generalCategoryType, "name" | 'position'>;
-export type updateRootCategory = Pick<generalCategoryType, "name" | 'position'>;
+export type createRootCategory = Pick<generalCategoryType, "name" | "position">;
+export type updateRootCategory = Pick<generalCategoryType, "name" | "position">;
 
 export type createSubCategoryType = z.infer<typeof createSubCategorySchema>;
 export type updateSubCategoryType = z.infer<typeof updateSubCategorySchema>; // <-- Tipado flexible

@@ -13,7 +13,7 @@ export async function getRootCategories() {
     const url = "/category";
     const { data } = await api.get(url);
     const response = getRootCategoriesSchema.safeParse(data);
-    
+
     if (response.success) {
       return response.data;
     }
