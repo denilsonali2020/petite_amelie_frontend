@@ -178,7 +178,7 @@ export default function PublicLayout() {
                 Más Vendidos
               </Link>
               <Link
-                to="#"
+                to="/ofertas"
                 className="border border-transparent hover:border-black px-2.5 py-1.5 rounded-xs transition-all hover:text-black"
               >
                 Ofertas
