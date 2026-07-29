@@ -5,7 +5,7 @@ export const globalInventorySchema = z.object({
   id: z.number(),
   uuid: z.string(),
   name: z.string(),
-  description: z.string().nullable(),
+  description: z.string(),
   position: z.number(),
   imageURL: z.string().nullable(),
   parentId: z.string().nullable(),
