@@ -183,7 +183,7 @@ export default function SubCategoryListview() {
                                   className="max-w-50 lg:max-w-70 truncate text-xs text-gray-500 font-normal"
                                   title={subCategory.description}
                                 >
-                                  {subCategory.description}
+                                  {subCategory.description.slice(0, 30)}...
                                 </p>
                               ) : (
                                 <span className="text-xs text-gray-300 italic">

@@ -13,7 +13,7 @@ const featuredProducts = [
     discountPrice: 520.0,
     isOnDiscount: true,
     images:
-      "https://images.unsplash.com/photo-1608248597481-496100c8c836?auto=format&fit=crop&w=600&q=80",
+      "https://images.unsplash.com/photo-1617897903246-719242758050?auto=format&fit=crop&w=600&q=80",
   },
   {
     uuid: "prod-2",
@@ -196,7 +196,7 @@ export default function NewArrivalsView() {
       <section className="px-4 py-6 max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-bold text-neutral-900 tracking-tight">
-            Rutinas Completas Recién Agregadas
+            Rutinas Completas Recién Agregadas -- Falta Meter CODIGO --
           </h2>
         </div>
         {renderProductSlider([...featuredProducts].reverse())}

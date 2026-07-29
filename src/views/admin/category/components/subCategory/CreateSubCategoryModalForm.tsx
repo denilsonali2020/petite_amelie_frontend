@@ -32,6 +32,7 @@ export default function CreateSubCategoryModalForm({
     defaultValues: {
       name: "",
       position: undefined,
+      description: "",
       parentId: rootCategoryId,
       imageURL: undefined,
     },
@@ -77,6 +78,7 @@ export default function CreateSubCategoryModalForm({
     formData.append("name", data.name);
     // Aseguramos que la posición sea un número al enviarlo
     formData.append("position", String(data.position || 0));
+    formData.append("description", String(data.description));
 
     if (data.parentId) {
       formData.append("parentId", data.parentId);
@@ -134,6 +136,36 @@ export default function CreateSubCategoryModalForm({
             <ErrorMessage>{errors.position.message}</ErrorMessage>
           )}
         </div>
+      </div>
+
+      {/* Campo Descripción */}
+      <div className="group">
+        <label className="block text-[13px] font-medium text-slate-700 mb-1.5 transition-colors group-focus-within:text-pink-600">
+          Descripción
+        </label>
+        <textarea
+          rows={3}
+          className={`w-full rounded-lg border px-3 py-2.5 text-sm outline-none transition-all resize-none ${
+            errors.description
+              ? "border-red-300 focus:border-red-500 focus:ring-red-500/10"
+              : "border-slate-200 focus:border-pink-500 focus:bg-white focus:ring-pink-500/10"
+          }`}
+          placeholder="Escribe la descripcion de la categoria"
+          {...register("description", {
+            required: "La descripción es obligatoria",
+            minLength: {
+              value: 50,
+              message: "Debe tener al menos 50 caracteres",
+            },
+            maxLength: {
+              value: 90,
+              message: "No puede tener más de 90 caracteres",
+            },
+          })}
+        />
+        {errors.description && (
+          <ErrorMessage>{errors.description.message}</ErrorMessage>
+        )}
       </div>
 
       {/* Campo Imagen con Dropzone y Miniatura */}

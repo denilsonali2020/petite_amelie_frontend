@@ -32,7 +32,7 @@ export const latestSubCategoriesSchema = z.array(
   z.object({
     uuid: z.string(),
     name: z.string(),
-    description: z.string(),
+    description: z.string().nullable(),
     imageURL: z.string().nullable(),
   }),
 );

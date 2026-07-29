@@ -17,6 +17,7 @@ export const globalInventorySchema = z.object({
 export const createSubCategorySchema = z.object({
   name: z.string().min(1, "El nombre es obligatorio"),
   position: z.number(),
+  description: z.string(),
   parentId: z.string().nullable(),
   imageURL: z
     .custom<FileList>()
@@ -29,7 +30,7 @@ export const createSubCategorySchema = z.object({
 // Schema para EDITAR / ACTUALIZAR (Acepta FileList o String)
 export const updateSubCategorySchema = z.object({
   name: z.string().min(1, "El nombre es obligatorio"),
-  description: z.string().nullable(),
+  description: z.string(),
   position: z.number(),
   imageURL: z
     .union([z.instanceof(FileList), z.string(), z.null()])

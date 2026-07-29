@@ -1,16 +1,23 @@
 import { useQuery } from "@tanstack/react-query";
 import { latestSubCategories } from "../services/homeService";
-import { Link, Navigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export default function LatestCategories() {
   const { data, isLoading, isError } = useQuery({
     queryKey: ["latestSubCategories"],
     queryFn: latestSubCategories,
+    retry: false,
   });
 
-  if (isLoading) return "";
+  if (isLoading) return "Cargando";
 
-  if (isError) return <Navigate to={"/404"} />;
+  if (isError) {
+    return (
+      <div className="py-10 text-center text-sm text-neutral-500 bg-neutral-50">
+        No se pudieron cargar las categorías en este momento.
+      </div>
+    );
+  }
 
   if (data)
     return (
@@ -33,7 +40,7 @@ export default function LatestCategories() {
                 className="group relative min-h-75 overflow-hidden rounded-xs bg-neutral-900"
               >
                 <img
-                  src={category.imageURL || ""}
+                  src={category.imageURL || category.name}
                   alt={category.name}
                   className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />
@@ -43,7 +50,7 @@ export default function LatestCategories() {
                 <div className="absolute inset-x-0 bottom-0 p-6 text-white">
                   <h3 className="text-xl font-black">{category.name}</h3>
                   <p className="mt-2 text-xs leading-5 text-neutral-200">
-                    {category.description}
+                    {category.description?.slice(0, 35)}...
                   </p>
 
                   <span className="mt-4 inline-block text-xs font-black uppercase tracking-wider underline underline-offset-4">
