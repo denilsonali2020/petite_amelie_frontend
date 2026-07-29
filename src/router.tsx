@@ -83,7 +83,7 @@ export default function Router() {
           RUTAS PUBLICAS (CUSTOMERS)
         ========================================================== */}
         <Route element={<PublicLayout />}>
-          <Route path="/petite-amelie" element={<HomeView />} index />
+          <Route path="/" element={<HomeView />} index />
           <Route path="/novedades" element={<NewArrivalsView />} />
           <Route path="/mas-vendidos" element={<BestSellersView />} />
           <Route path="/ofertas" element={<OffersView />} />
