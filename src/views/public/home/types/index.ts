@@ -54,8 +54,27 @@ export const getBestSellersPerTopCategoriesSchema = z.array(
     ),
   }),
 );
-export type getBestSellersPerTopCategoriesType = z.infer<typeof getBestSellersPerTopCategoriesSchema>
 
+export const getOffersPerTopCategoriesSchema = z.array(
+  z.object({
+    name: z.string(),
+    products: z.array(
+      z.object({
+        uuid: z.string(),
+        name: z.string(),
+        description: z.string(),
+        price: z.number(),
+        isOnDiscount: z.boolean(),
+        discountPrice: z.number(),
+        images: z.string(),
+      }),
+    ),
+  }),
+);
+
+//Types
+
+//Product Carousel
 export type ProductCardCarouselType = z.infer<typeof newArrivalsSchema>;
 
 //type de un cardproduct reutilizable

@@ -3,7 +3,6 @@ import ProductCarousel from "@/components/reusable/ProductCarousel";
 import { useQuery } from "@tanstack/react-query";
 import { getBestSellersPerTopCategories } from "../services/homeService";
 import { Navigate } from "react-router-dom";
-import type { getBestSellersPerTopCategoriesType } from "../types";
 
 export default function BestSellersView() {
   const { data, isLoading, isError } = useQuery({
@@ -15,9 +14,8 @@ export default function BestSellersView() {
 
   if (isError) return <Navigate to={"/404"} />;
 
-  const firstCategories: getBestSellersPerTopCategoriesType = data!.slice(0, 3);
-  const remainingCategories: getBestSellersPerTopCategoriesType =
-    data!.slice(3);
+  const firstCategories = data!.slice(0, 3);
+  const remainingCategories = data!.slice(3);
 
   return (
     <div className="bg-neutral-50 min-h-screen font-sans">
