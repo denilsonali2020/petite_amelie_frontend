@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Navigate, useParams } from "react-router-dom";
 import { searchProduct } from "../services/storeProductService";
@@ -6,6 +6,9 @@ import { searchProduct } from "../services/storeProductService";
 export default function StoreProductView() {
   const params = useParams();
   const productId = params.productId!;
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ["getProduct", productId],
