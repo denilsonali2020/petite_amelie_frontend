@@ -3,6 +3,7 @@ import ProductCarousel from "@/components/reusable/ProductCarousel";
 import { useQuery } from "@tanstack/react-query";
 import { getOffersPerTopCategories } from "../services/homeService";
 import { Navigate } from "react-router-dom";
+import Loading from "@/components/reusable/Loading";
 
 export default function OffersView() {
   const { data, isLoading, isError } = useQuery({
@@ -11,7 +12,7 @@ export default function OffersView() {
     retry: false,
   });
 
-  if (isLoading) return "";
+  if (isLoading) return <Loading />;
 
   if (isError) return <Navigate to={"/404"} />;
 

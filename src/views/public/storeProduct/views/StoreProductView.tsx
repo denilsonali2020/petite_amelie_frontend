@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Navigate, useParams } from "react-router-dom";
 import { searchProduct } from "../services/storeProductService";
+import Loading from "@/components/reusable/Loading";
 
 export default function StoreProductView() {
   const params = useParams();
@@ -18,19 +19,7 @@ export default function StoreProductView() {
 
   const [selectedImage, setSelectedImage] = useState(0);
 
-  if (isLoading) {
-    return (
-      <div className="flex h-96 items-center justify-center">
-        <div className="flex flex-col items-center gap-3">
-          <div className="h-10 w-10 animate-spin rounded-full border-4 border-rose-100 border-t-rose-500" />
-
-          <span className="text-sm font-medium uppercase tracking-widest text-gray-400">
-            Cargando...
-          </span>
-        </div>
-      </div>
-    );
-  }
+  if (isLoading) return <Loading />;
 
   if (isError || !data) {
     return <Navigate to="/404" />;

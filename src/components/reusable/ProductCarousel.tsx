@@ -2,6 +2,7 @@ import { useRef } from "react";
 import { ChevronRightIcon, ChevronLeftIcon } from "@heroicons/react/24/outline";
 import ProductCard from "@/components/reusable/ProductCard";
 import type { ProductCardCarouselType } from "@/views/public/home/types";
+import Loading from "./Loading";
 
 interface ProductCarouselProps {
   title: string;
@@ -70,9 +71,7 @@ export default function ProductCarousel({
       </div>
 
       {isLoading && (
-        <div className="flex h-64 items-center justify-center text-sm font-medium text-neutral-400">
-          Cargando productos...
-        </div>
+        <Loading />
       )}
 
       {isError && (

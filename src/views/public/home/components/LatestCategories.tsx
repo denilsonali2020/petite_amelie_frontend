@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { latestSubCategories } from "../services/homeService";
 import { Link } from "react-router-dom";
+import Loading from "@/components/reusable/Loading";
 
 export default function LatestCategories() {
   const { data, isLoading, isError } = useQuery({
@@ -9,7 +10,7 @@ export default function LatestCategories() {
     retry: false,
   });
 
-  if (isLoading) return "Cargando";
+  if (isLoading) return <Loading />;
 
   if (isError) {
     return (
