@@ -101,7 +101,7 @@ export default function PublicLayout() {
             {/* LOGO (Con recuadro de enfoque estilo Amazon) */}
             <div className="shrink-0 flex items-center">
               <Link
-                to="/petite-amelie"
+                to="/"
                 className="border border-transparent hover:border-black px-2 py-1.5 rounded-xs transition-all flex items-center"
               >
                 <span className="text-3xl font-black tracking-tighter text-black uppercase">

@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 export default function ProductCard({ product }: { product: ProductCardType }) {
   return (
     <Link
-      to={`/producto/${product.uuid}`}
+      to={`/store/products/${product.uuid}`}
       className={`group relative rounded-xs border border-neutral-100 bg-white p-2 transition-colors hover:border-neutral-300 w-[44%] flex-none snap-start sm:w-[30%] lg:w-[23%]`}
     >
       {product.isOnDiscount && (

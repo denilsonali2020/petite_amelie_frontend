@@ -42,6 +42,7 @@ import HomeView from "./views/public/home/views/HomeView";
 import NewArrivalsView from "./views/public/home/views/NewArrivalsView";
 import BestSellersView from "./views/public/home/views/BestSellersView";
 import OffersView from "./views/public/home/views/OffersView";
+import StoreProductView from "./views/public/storeProduct/views/StoreProductView";
 
 const ROLES = {
   OWNER: "OWNER",
@@ -87,6 +88,10 @@ export default function Router() {
           <Route path="/novedades" element={<NewArrivalsView />} />
           <Route path="/mas-vendidos" element={<BestSellersView />} />
           <Route path="/ofertas" element={<OffersView />} />
+          <Route
+            path="/store/products/:productId"
+            element={<StoreProductView />}
+          />
         </Route>
 
         {/* ==========================================================
