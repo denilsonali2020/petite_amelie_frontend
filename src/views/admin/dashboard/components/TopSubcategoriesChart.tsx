@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { PieChart, Pie, ResponsiveContainer, Tooltip } from "recharts"; // <-- Quitamos 'Cell' de aquí
 import { Navigate } from "react-router-dom";
 import { getTopSellingSubcategories } from "../services/dashBoardService";
+import LoadingAdminSite from "@/components/reusable/LoadingAdminSite";
 
 const PIE_COLORS = [
   "#0247DB", // Azul fuerte
@@ -18,17 +19,7 @@ export default function TopSubcategoriesChart() {
     queryFn: getTopSellingSubcategories,
   });
 
-  if (isLoading)
-    return (
-      <div className="flex h-96 items-center justify-center">
-        <div className="flex flex-col items-center gap-3">
-          <div className="h-10 w-10 border-4 border-rose-100 border-t-rose-500 animate-spin rounded-full" />
-          <span className="text-sm font-medium text-gray-400 uppercase tracking-widest">
-            Cargando...
-          </span>
-        </div>
-      </div>
-    );
+  if (isLoading) return <LoadingAdminSite />;
 
   if (isError) return <Navigate to={"/404"} />;
 

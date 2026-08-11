@@ -2,7 +2,7 @@ import { useRef } from "react";
 import { ChevronRightIcon, ChevronLeftIcon } from "@heroicons/react/24/outline";
 import ProductCard from "@/components/reusable/ProductCard";
 import type { ProductCardCarouselType } from "@/views/public/home/types";
-import Loading from "./Loading";
+import Loading from "./LoadingWebSite";
 
 interface ProductCarouselProps {
   title: string;

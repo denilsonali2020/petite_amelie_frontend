@@ -19,6 +19,7 @@ import { getSubCategoriesByUuid } from "../services/subCategoriesService";
 import DeleteSubCategoryModal from "../components/subCategory/DeleteSubCategoryModal";
 import CreateSubCategoryModal from "../components/subCategory/CreateSubCategoryModal";
 import RoleWrapper from "@/components/guards/RoleWrapper";
+import LoadingAdminSite from "@/components/reusable/LoadingAdminSite";
 
 // Constantes de Roles
 const ROLES = {
@@ -39,17 +40,7 @@ export default function SubCategoryListview() {
     retry: false,
   });
 
-  if (isLoading)
-    return (
-      <div className="flex h-96 items-center justify-center">
-        <div className="flex flex-col items-center gap-3">
-          <div className="h-10 w-10 border-4 border-rose-100 border-t-rose-500 animate-spin rounded-full" />
-          <span className="text-sm font-medium text-gray-400 uppercase tracking-widest">
-            Cargando...
-          </span>
-        </div>
-      </div>
-    );
+  if (isLoading) return <LoadingAdminSite />;
 
   if (isError) return <Navigate to={"/404"} />;
 

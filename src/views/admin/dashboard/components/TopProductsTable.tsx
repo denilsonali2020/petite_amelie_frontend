@@ -3,6 +3,7 @@ import { CubeIcon } from "@heroicons/react/24/outline";
 import { Navigate } from "react-router-dom";
 import { getTopSellingProducts } from "../services/dashBoardService";
 import { formatCurrency } from "@/shared/utils";
+import LoadingAdminSite from "@/components/reusable/LoadingAdminSite";
 
 
 export default function TopProductsTable() {
@@ -11,18 +12,7 @@ export default function TopProductsTable() {
     queryFn: getTopSellingProducts,
   });
 
-  if (isLoading) {
-    return (
-      <div className="bg-white rounded-lg border border-slate-200 shadow-sm flex items-center justify-center min-h-62.5">
-        <div className="flex flex-col items-center gap-3">
-          <div className="h-8 w-8 border-4 border-slate-100 border-t-blue-500 animate-spin rounded-full shadow-sm" />
-          <span className="text-xs font-medium text-slate-400 uppercase tracking-widest">
-            Cargando productos...
-          </span>
-        </div>
-      </div>
-    );
-  }
+  if (isLoading) return <LoadingAdminSite />;
 
   if (isError) return <Navigate to={"/404"} />;
 

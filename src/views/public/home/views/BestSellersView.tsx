@@ -3,7 +3,7 @@ import ProductCarousel from "@/components/reusable/ProductCarousel";
 import { useQuery } from "@tanstack/react-query";
 import { getBestSellersPerTopCategories } from "../services/homeService";
 import { Navigate } from "react-router-dom";
-import Loading from "@/components/reusable/Loading";
+import LoadingWebSite from "@/components/reusable/LoadingWebSite";
 
 export default function BestSellersView() {
   const { data, isLoading, isError } = useQuery({
@@ -11,7 +11,7 @@ export default function BestSellersView() {
     queryFn: getBestSellersPerTopCategories,
   });
 
-  if (isLoading) return <Loading />;
+  if (isLoading) return <LoadingWebSite />;
 
   if (isError) return <Navigate to={"/404"} />;
 

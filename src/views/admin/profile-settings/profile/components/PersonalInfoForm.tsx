@@ -7,7 +7,6 @@ import toast from "react-hot-toast";
 import { roleTranslation } from "@/locales/es";
 
 const getInitials = (name: string) => {
-  if (!name) return "AD";
   const names = name.split(" ");
   return names.length > 1
     ? `${names[0][0]}${names[1][0]}`.toUpperCase()

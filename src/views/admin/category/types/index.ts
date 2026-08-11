@@ -5,7 +5,7 @@ export const globalInventorySchema = z.object({
   id: z.number(),
   uuid: z.string(),
   name: z.string(),
-  description: z.string(),
+  description: z.string().nullable(),
   position: z.number(),
   imageURL: z.string().nullable(),
   parentId: z.string().nullable(),
@@ -27,10 +27,10 @@ export const createSubCategorySchema = z.object({
     ),
 });
 
-// Schema para EDITAR / ACTUALIZAR (Acepta FileList o String)
+// Schema para editar / actualizar
 export const updateSubCategorySchema = z.object({
   name: z.string().min(1, "El nombre es obligatorio"),
-  description: z.string(),
+  description: z.string().nullable(),
   position: z.number(),
   imageURL: z
     .union([z.instanceof(FileList), z.string(), z.null()])
@@ -50,7 +50,15 @@ export const getRootCategoriesSchema = z.array(
   }),
 );
 
-//obetener una categoria raiz con sus subcategorias
+//obtener una categoria raiz
+export const getCategorySchema = globalInventorySchema.pick({
+  name: true,
+  description: true,
+  position: true,
+  imageURL: true,
+});
+
+//obetener una sub-categoria con sus subcategorias
 export const getSubCategoriesByUuidSchema = z.object({
   name: z.string(),
   children: z.array(
@@ -64,13 +72,6 @@ export const getSubCategoriesByUuidSchema = z.object({
   ),
 });
 
-export const getCategorySchema = globalInventorySchema.pick({
-  name: true,
-  description: true,
-  position: true,
-  imageURL: true,
-});
-
 // --- TYPES EXPORTADOS ---
 export type generalCategoryType = z.infer<typeof globalInventorySchema>;
 export type rootCategoriesType = z.infer<typeof getRootCategoriesSchema>;
@@ -79,4 +80,4 @@ export type createRootCategory = Pick<generalCategoryType, "name" | "position">;
 export type updateRootCategory = Pick<generalCategoryType, "name" | "position">;
 
 export type createSubCategoryType = z.infer<typeof createSubCategorySchema>;
-export type updateSubCategoryType = z.infer<typeof updateSubCategorySchema>; // <-- Tipado flexible
+export type updateSubCategoryType = z.infer<typeof updateSubCategorySchema>;

@@ -3,6 +3,7 @@ import { Navigate } from "react-router-dom";
 import { getRecentOrders } from "../services/dashBoardService";
 import { getStatusConfig } from "../../orders/utils";
 import { formatCurrency } from "@/shared/utils";
+import LoadingAdminSite from "@/components/reusable/LoadingAdminSite";
 
 // Tipos
 type OrderStatus =
@@ -21,18 +22,7 @@ export default function RecentOrdersTable() {
     queryFn: getRecentOrders,
   });
 
-  if (isLoading) {
-    return (
-      <div className="xl:col-span-8 bg-white rounded-lg border border-slate-200 shadow-sm flex items-center justify-center min-h-75">
-        <div className="flex flex-col items-center gap-3">
-          <div className="h-8 w-8 border-4 border-emerald-100 border-t-emerald-500 animate-spin rounded-full" />
-          <span className="text-xs font-medium text-slate-400 uppercase tracking-widest">
-            Cargando pedidos...
-          </span>
-        </div>
-      </div>
-    );
-  }
+  if (isLoading) return <LoadingAdminSite />;
 
   if (isError) return <Navigate to={"/404"} />;
 
@@ -41,7 +31,6 @@ export default function RecentOrdersTable() {
 
   return (
     <div className="xl:col-span-8 bg-white rounded-lg border border-slate-200 shadow-sm overflow-hidden flex flex-col">
-      
       {/* Estilos para un scrollbar minimalista y profesional */}
       <style>{`
         .custom-scrollbar::-webkit-scrollbar {

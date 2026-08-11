@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getUser } from "../services/userService";
 import { Navigate, useParams } from "react-router-dom";
 import EditUserForm from "../components/EditUserForm";
+import LoadingAdminSite from "@/components/reusable/LoadingAdminSite";
 
 export default function EditUserView() {
   const param = useParams();
@@ -13,17 +14,7 @@ export default function EditUserView() {
     queryFn: () => getUser(userId),
   });
 
-  if (isLoading)
-    return (
-      <div className="flex h-96 items-center justify-center">
-        <div className="flex flex-col items-center gap-3">
-          <div className="h-10 w-10 border-4 border-rose-100 border-t-rose-500 animate-spin rounded-full" />
-          <span className="text-sm font-medium text-gray-400 uppercase tracking-widest">
-            Cargando...
-          </span>
-        </div>
-      </div>
-    );
+  if (isLoading) return <LoadingAdminSite />;
 
   if (isError) return <Navigate to="/404" />;
 
@@ -51,7 +42,7 @@ export default function EditUserView() {
 
           {/* Cuerpo */}
           <div className="p-6">
-            <EditUserForm userId={userId} data={data}/>
+            <EditUserForm userId={userId} data={data} />
           </div>
         </div>
       </div>

@@ -21,6 +21,7 @@ import { getStatusConfig } from "../utils";
 import { formatCurrency } from "@/shared/utils";
 import ShippingLogisticsForm from "../components/PreviewOrder/ShippingLogisticsForm";
 import StatusForm from "../components/PreviewOrder/StatusForm";
+import LoadingAdminSite from "@/components/reusable/LoadingAdminSite";
 
 export default function DetailOrderView() {
   const navigate = useNavigate();
@@ -33,17 +34,8 @@ export default function DetailOrderView() {
     queryFn: () => getOrder(orderId),
     retry: false,
   });
-  if (isLoading)
-    return (
-      <div className="flex h-96 items-center justify-center">
-        <div className="flex flex-col items-center gap-3">
-          <div className="h-8 w-8 border-4 border-rose-100 border-t-rose-500 animate-spin rounded-full" />
-          <span className="text-[11px] font-bold text-gray-400 uppercase tracking-widest">
-            Cargando...
-          </span>
-        </div>
-      </div>
-    );
+
+  if (isLoading) return <LoadingAdminSite />;
 
   if (isError || !data) return <Navigate to={"/404"} />;
 

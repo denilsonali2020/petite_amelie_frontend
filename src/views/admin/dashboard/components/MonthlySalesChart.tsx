@@ -11,7 +11,7 @@ import {
 import { getCurrentYearMonthlySales } from "../services/dashBoardService";
 import { Navigate } from "react-router-dom";
 import { formatCurrency } from "@/shared/utils";
-
+import LoadingAdminSite from "@/components/reusable/LoadingAdminSite";
 
 export default function MonthlySalesChart() {
   const { data, isLoading, isError } = useQuery({
@@ -19,17 +19,7 @@ export default function MonthlySalesChart() {
     queryFn: getCurrentYearMonthlySales,
   });
 
-  if (isLoading)
-    return (
-      <div className="flex h-64 w-full items-center justify-center">
-        <div className="flex flex-col items-center gap-3">
-          <div className="h-8 w-8 border-4 border-emerald-100 border-t-emerald-500 animate-spin rounded-full" />
-          <span className="text-xs font-medium text-slate-400 uppercase tracking-widest">
-            Cargando...
-          </span>
-        </div>
-      </div>
-    );
+  if (isLoading) return <LoadingAdminSite />;
 
   if (isError) return <Navigate to={"/404"} />;
 

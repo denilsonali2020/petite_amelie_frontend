@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Navigate, useParams } from "react-router-dom";
 import { searchProduct } from "../services/storeProductService";
-import Loading from "@/components/reusable/Loading";
+import LoadingWebSite from "@/components/reusable/LoadingWebSite";
 
 export default function StoreProductView() {
   const params = useParams();
@@ -19,7 +19,7 @@ export default function StoreProductView() {
 
   const [selectedImage, setSelectedImage] = useState(0);
 
-  if (isLoading) return <Loading />;
+  if (isLoading) return <LoadingWebSite />;
 
   if (isError || !data) {
     return <Navigate to="/404" />;
