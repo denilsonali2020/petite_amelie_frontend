@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useAuthStore } from "@/store/auth/authStore";
 import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 import toast from "react-hot-toast";
@@ -10,7 +9,6 @@ const inputClasses =
   "block w-full rounded-lg outline-none border-0 px-4 py-2.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-pink-600 sm:text-sm sm:leading-6 transition-all";
 
 export default function PasswordChangeForm() {
-  const user = useAuthStore((state) => state.user);
   const [showPassword, setShowPassword] = useState(false);
 
   // 1. Configuración de React Hook Form
@@ -39,8 +37,6 @@ export default function PasswordChangeForm() {
 
   // 3. Función al enviar el formulario
   const onSubmit = (data: PasswordFormData) => {
-    if (!user?.uuid) return;
-
     // Solo enviamos lo que tu API y tu type original esperan (sin confirmPassword)
     const formDataToSend: changePasswordForm = {
       password: data.password,
@@ -48,7 +44,6 @@ export default function PasswordChangeForm() {
     };
 
     mutate({
-      uuid: user.uuid,
       formData: formDataToSend,
     });
   };

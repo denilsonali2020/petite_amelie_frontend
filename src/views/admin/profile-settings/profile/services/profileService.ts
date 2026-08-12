@@ -28,12 +28,11 @@ export async function updateName({ uuid, formData }: updateNameProps) {
 }
 
 type changePasswordProps = {
-  uuid: globalUserType["uuid"];
   formData: changePasswordForm;
 };
-export async function changePassword({ uuid, formData }: changePasswordProps) {
+export async function changePassword({ formData }: changePasswordProps) {
   try {
-    const url = `/users/${uuid}/change-password`;
+    const url = `/users/change-password`;
     const { data } = await api.patch<string>(url, formData);
     return data;
   } catch (error) {
