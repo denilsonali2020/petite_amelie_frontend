@@ -72,15 +72,13 @@ export async function updateUser({ userId, formData }: updateUserProps) {
 }
 
 type verifyPasswordProps = {
-  userId: globalUserType["uuid"];
   password: passwordForm;
 };
 export async function verifyPassword({
-  userId,
   password,
 }: verifyPasswordProps) {
   try {
-    const url = `/users/${userId}/check-password`;
+    const url = `/users/check-password`;
     const { data } = await api.post<string>(url, password);
     return data;
   } catch (error) {

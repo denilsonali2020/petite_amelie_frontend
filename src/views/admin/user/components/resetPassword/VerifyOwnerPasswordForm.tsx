@@ -2,11 +2,8 @@ import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import ErrorMessage from "@/components/ui/ErrorMessage";
-import { useAuthStore } from "@/store/auth/authStore";
 import type { passwordForm } from "../../types";
 import { verifyPassword } from "../../services/userService";
-// Importa tu servicio real aquí
-// import { verifyPassword } from "@/services/authService";
 
 type VerifyFormProps = {
   onSuccess: () => void;
@@ -17,8 +14,6 @@ export default function VerifyOwnerPasswordForm({
   onSuccess,
   closeModal,
 }: VerifyFormProps) {
-  const userId = useAuthStore.getState().user!.uuid;
-
   const {
     register,
     handleSubmit,
@@ -39,7 +34,7 @@ export default function VerifyOwnerPasswordForm({
   });
 
   const handleVerify = (formData: passwordForm) => {
-    mutate({ userId, password: formData });
+    mutate({ password: formData });
   };
 
   return (
