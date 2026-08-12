@@ -21,7 +21,7 @@ export default function PersonalInfoForm() {
   const user = useAuthStore((state) => state.user);
   const setName = useAuthStore((state) => state.setName);
 
-  // 1. Configuración de React Hook Form
+  //  react hook form
   const {
     register,
     handleSubmit,
@@ -32,7 +32,7 @@ export default function PersonalInfoForm() {
     },
   });
 
-  // 2. Configuración de la Mutación (React Query)
+  // mutate
   const { mutate, isPending } = useMutation({
     mutationFn: updateName,
     onSuccess: (data) => {
@@ -44,9 +44,8 @@ export default function PersonalInfoForm() {
     },
   });
 
-  // 3. Función al enviar el formulario
+  // enviar el data
   const onSubmit = (data: updateNameForm) => {
-    // Llamamos al mutate pasándole la estructura que espera tu función API
     mutate({
       formData: data,
     });

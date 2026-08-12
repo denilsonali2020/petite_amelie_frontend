@@ -11,7 +11,7 @@ const inputClasses =
 export default function PasswordChangeForm() {
   const [showPassword, setShowPassword] = useState(false);
 
-  // 1. Configuración de React Hook Form
+  // RHF
   const {
     register,
     handleSubmit,
@@ -20,10 +20,10 @@ export default function PasswordChangeForm() {
     formState: { errors },
   } = useForm<PasswordFormData>();
 
-  // Observamos el valor de la nueva contraseña para validarla contra la confirmación
+  //escucha por los cambios
   const newPasswordValue = watch("newPassword");
 
-  // 2. Configuración de la Mutación (React Query)
+  // mutate
   const { mutate, isPending } = useMutation({
     mutationFn: changePassword,
     onSuccess: (data) => {
@@ -35,14 +35,11 @@ export default function PasswordChangeForm() {
     },
   });
 
-  // 3. Función al enviar el formulario
   const onSubmit = (data: PasswordFormData) => {
-    // Solo enviamos lo que tu API y tu type original esperan (sin confirmPassword)
     const formDataToSend: changePasswordForm = {
       password: data.password,
       newPassword: data.newPassword,
     };
-
     mutate({
       formData: formDataToSend,
     });
@@ -60,7 +57,6 @@ export default function PasswordChangeForm() {
       </div>
 
       <form className="space-y-5 max-w-md" onSubmit={handleSubmit(onSubmit)}>
-        {/* CONTRASEÑA ACTUAL (Siempre oculta) */}
         <div>
           <label
             htmlFor="current-password"
@@ -84,7 +80,6 @@ export default function PasswordChangeForm() {
           )}
         </div>
 
-        {/* NUEVA CONTRASEÑA */}
         <div>
           <label
             htmlFor="new-password"
@@ -97,7 +92,6 @@ export default function PasswordChangeForm() {
               id="new-password"
               type={showPassword ? "text" : "password"}
               placeholder="Nueva contraseña"
-              // Agregamos pr-10 para que el texto no se superponga con el icono
               className={`${inputClasses} pr-10 ${errors.newPassword ? "ring-red-500 focus:ring-red-500" : ""}`}
               {...register("newPassword", {
                 required: "Ingresa una contraseña",
@@ -107,7 +101,6 @@ export default function PasswordChangeForm() {
                 },
               })}
             />
-            {/* Botón del Ojo */}
             <button
               type="button"
               onClick={toggleVisibility}
