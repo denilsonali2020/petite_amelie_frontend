@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useAuthStore } from "@/store/auth/authStore";
 import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 import toast from "react-hot-toast";
@@ -14,7 +13,6 @@ export default function ChangePinModalForm({
 }: {
   closeModal: () => void;
 }) {
-  const user = useAuthStore((state) => state.user);
   const [showPin, setShowPin] = useState(false);
 
   const {
@@ -33,8 +31,7 @@ export default function ChangePinModalForm({
   });
 
   const onSubmit = (data: changeQuickPinForm) => {
-    if (!user?.uuid) return;
-    mutate({ uuid: user.uuid, formData: { quickPin: data.quickPin } });
+    mutate({ formData: { quickPin: data.quickPin } });
   };
 
   return (

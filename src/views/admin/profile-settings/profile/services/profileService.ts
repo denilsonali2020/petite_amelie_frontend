@@ -6,15 +6,13 @@ import {
   type changeQuickPinForm,
   type updateNameForm,
 } from "../types";
-import type { globalUserType } from "@/views/admin/user/types";
 
 type updateNameProps = {
-  uuid: globalUserType["uuid"];
   formData: updateNameForm;
 };
-export async function updateName({ uuid, formData }: updateNameProps) {
+export async function updateName({ formData }: updateNameProps) {
   try {
-    const url = `/users/${uuid}/name`;
+    const url = `/users/name`;
     const { data } = await api.patch(url, formData);
     const response = updateNameSchema.safeParse(data);
     if (response.success) {
@@ -43,12 +41,11 @@ export async function changePassword({ formData }: changePasswordProps) {
 }
 
 type changeQuickPinProps = {
-  uuid: globalUserType["uuid"];
   formData: changeQuickPinForm;
 };
-export async function changeQuickPin({ uuid, formData }: changeQuickPinProps) {
+export async function changeQuickPin({ formData }: changeQuickPinProps) {
   try {
-    const url = `/users/${uuid}/change-quickpin`;
+    const url = `/users/change-quickpin`;
     const { data } = await api.patch<string>(url, formData);
     return data;
   } catch (error) {

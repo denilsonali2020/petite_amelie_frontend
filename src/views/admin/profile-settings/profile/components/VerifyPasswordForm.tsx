@@ -33,7 +33,7 @@ export default function VerifyPasswordForm() {
 
   const onSubmit = (data: { password: string }) => {
     if (!user?.uuid) return;
-    mutate({ userId: user.uuid, password: { password: data.password } });
+    mutate({ password: { password: data.password } });
   };
 
   return (
@@ -105,7 +105,7 @@ export default function VerifyPasswordForm() {
               )}
             </button>
           </div>
-          
+
           {/* Muestra el error de validación debajo del input */}
           {errors.password && (
             <p className="mt-1.5 text-sm text-red-500 font-medium">

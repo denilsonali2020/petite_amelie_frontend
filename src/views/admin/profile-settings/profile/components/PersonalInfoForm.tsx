@@ -46,11 +46,8 @@ export default function PersonalInfoForm() {
 
   // 3. Función al enviar el formulario
   const onSubmit = (data: updateNameForm) => {
-    if (!user?.uuid) return; // Validación de seguridad
-
     // Llamamos al mutate pasándole la estructura que espera tu función API
     mutate({
-      uuid: user.uuid,
       formData: data,
     });
   };
