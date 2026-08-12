@@ -8,10 +8,10 @@ const api = axios.create({
   withCredentials: true,
 });
 
-// 1. INTERCEPTOR DE PETICIÓN (Request)
-// Encargado de inyectar el accessToken en cada petición si el usuario está autenticado
+// 1 - Interceptor de Peticion tipo request
+// esto inyecta el accessToken en cada peticion si el usuario esta autenticado
 api.interceptors.request.use((config) => {
-  //Obtenemos el token de Zustand antes de cada petición
+  // obtenemos el accessToken de zustand antes de cada peticion
   const token = useAuthStore.getState().token;
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
@@ -19,27 +19,29 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// 2. INTERCEPTOR DE RESPUESTA (Response)
-// Encargado de atrapar errores 401 y renovar el token silenciosamente
+// 2 - Interceptor de respuesta de tipo response
+// esto atrapa errores 401 y renueva el token silenciosamente
 api.interceptors.response.use(
-  (response) => response, // Si la petición fue exitosa, la dejamos pasar
+  (response) => response, // Si la petición es exitosa sigue
+  // Si la petición falla, se ejecuta este callback de manejo de errores
   async (error) => {
     const originalRequest = error.config;
 
-    // Si el error es 401 (Token expirado) y no hemos intentado renovarlo ya
+    // Si el error es 401 osea Token expirado y no hemos intentado renovarlo ya
     if (error.response?.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true; // Marcamos para no entrar en un bucle infinito
+      originalRequest._retry = true; // marcamos true, para no entrar en un bucle infinito
 
       try {
         // Intentamos renovar el token usando el endpoint de refresh
         const data = await refresh();
-
+        if (!data) throw new Error("Error al obtener accessToken");
         // Si el refresh fue exitoso, obtenemos el nuevo token
-        const newToken = data!.accessToken;
+        const newToken = data.accessToken;
 
-        // Actualizamos Zustand con el nuevo token sin perder al usuario
+        // Obtenemos el actual usuario logeado
         const currentUser = useAuthStore.getState().user;
         if (currentUser) {
+          // actualizamos su token y refrescamos la sesion del actual usuario
           useAuthStore.getState().setAuth(newToken, currentUser);
         }
 
