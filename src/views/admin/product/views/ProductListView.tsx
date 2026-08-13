@@ -180,12 +180,9 @@ export default function ProductListView() {
                         <th className="px-3 py-3 text-left text-[10px] font-bold uppercase tracking-widest text-gray-400">
                           Visibilidad
                         </th>
-                        {/* OCULTAR COLUMNA DE ACCIONES AL CAJERO */}
-                        <RoleWrapper allowedRoles={[ROLES.OWNER, ROLES.ADMIN]}>
-                          <th scope="col" className="relative py-3 pl-3 pr-4">
-                            <span className="sr-only">Acciones</span>
-                          </th>
-                        </RoleWrapper>
+                        <th className="px-3 py-3  text-[10px] font-bold uppercase tracking-widest text-gray-400">
+                          Acciones
+                        </th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-50 bg-white">
@@ -293,46 +290,49 @@ export default function ProductListView() {
                               )}
                             </td>
 
-                            {/* OCULTAR BOTÓN EDITAR AL CAJERO */}
-                            <RoleWrapper
-                              allowedRoles={[ROLES.OWNER, ROLES.ADMIN]}
-                            >
-                              <td>
-                                <div className="flex justify-end items-center">
-                                  <div className="flex items-center border-l border-slate-100 ml-2 pl-3">
-                                    <button
-                                      className="p-1.5 text-gray-400 hover:text-blue-500 hover:bg-blue-50 rounded-md transition-all cursor-pointer"
-                                      onClick={() =>
-                                        navigate(
-                                          location.pathname +
-                                            `?productPreview=${product.uuid}`,
-                                        )
-                                      }
-                                      title="Preview"
-                                    >
-                                      <EyeIcon className="h-5 w-5" />
-                                    </button>
-                                  </div>
-                                </div>
-                              </td>
-                              <td className="relative whitespace-nowrap py-2.5 pl-3 pr-4 text-right">
-                                <div className="flex justify-end items-center">
-                                  <div className="flex items-center border-l border-slate-100 ml-2 pl-3">
-                                    <button
-                                      className="p-1.5 text-gray-400 hover:text-blue-500 hover:bg-blue-50 rounded-md transition-all cursor-pointer"
-                                      onClick={() =>
-                                        navigate(
-                                          `/admin/category/${rootCategoryId}/category/${subCategoryId}/sub-category/${product.uuid}/edit${location.search}`,
-                                        )
-                                      }
-                                      title="Editar"
-                                    >
-                                      <PencilIcon className="h-5 w-5" />
-                                    </button>
-                                  </div>
-                                </div>
-                              </td>
-                            </RoleWrapper>
+                            {/* ACCIONES */}
+                            <td className="relative whitespace-nowrap py-2.5 px-3">
+                              <div className="flex items-center justify-center gap-2">
+                                <RoleWrapper
+                                  allowedRoles={[
+                                    ROLES.OWNER,
+                                    ROLES.ADMIN,
+                                    ROLES.CASHIER,
+                                  ]}
+                                >
+                                  <button
+                                    type="button"
+                                    className="flex h-8 w-8 items-center justify-center rounded-md text-gray-400 transition-all hover:bg-blue-50 hover:text-blue-500 cursor-pointer"
+                                    onClick={() =>
+                                      navigate(
+                                        location.pathname +
+                                          `?productPreview=${product.uuid}`,
+                                      )
+                                    }
+                                    title="Preview"
+                                  >
+                                    <EyeIcon className="h-5 w-5" />
+                                  </button>
+                                </RoleWrapper>
+
+                                <RoleWrapper
+                                  allowedRoles={[ROLES.OWNER, ROLES.ADMIN]}
+                                >
+                                  <button
+                                    type="button"
+                                    className="flex h-8 w-8 items-center justify-center rounded-md text-gray-400 transition-all hover:bg-blue-50 hover:text-blue-500 cursor-pointer"
+                                    onClick={() =>
+                                      navigate(
+                                        `/admin/category/${rootCategoryId}/category/${subCategoryId}/sub-category/${product.uuid}/edit${location.search}`,
+                                      )
+                                    }
+                                    title="Editar"
+                                  >
+                                    <PencilIcon className="h-5 w-5" />
+                                  </button>
+                                </RoleWrapper>
+                              </div>
+                            </td>
                           </tr>
                         ))
                       ) : (
