@@ -28,6 +28,7 @@ import { formatCurrency } from "@/shared/utils";
 import RoleWrapper from "@/components/guards/RoleWrapper.tsx";
 import { generatePagination } from "../utils/index.ts";
 import { ROLES } from "../../user/types/index.ts";
+import PreviewProductModal from "../components/PreviewProductModal.tsx";
 
 export default function ProductListView() {
   const navigate = useNavigate();
@@ -296,6 +297,24 @@ export default function ProductListView() {
                             <RoleWrapper
                               allowedRoles={[ROLES.OWNER, ROLES.ADMIN]}
                             >
+                              <td>
+                                <div className="flex justify-end items-center">
+                                  <div className="flex items-center border-l border-slate-100 ml-2 pl-3">
+                                    <button
+                                      className="p-1.5 text-gray-400 hover:text-blue-500 hover:bg-blue-50 rounded-md transition-all cursor-pointer"
+                                      onClick={() =>
+                                        navigate(
+                                          location.pathname +
+                                            `?productPreview=${product.uuid}`,
+                                        )
+                                      }
+                                      title="Preview"
+                                    >
+                                      <EyeIcon className="h-5 w-5" />
+                                    </button>
+                                  </div>
+                                </div>
+                              </td>
                               <td className="relative whitespace-nowrap py-2.5 pl-3 pr-4 text-right">
                                 <div className="flex justify-end items-center">
                                   <div className="flex items-center border-l border-slate-100 ml-2 pl-3">
@@ -436,6 +455,9 @@ export default function ProductListView() {
         {/* OCULTAR MODAL DE CREACIÓN AL CAJERO */}
         <RoleWrapper allowedRoles={[ROLES.OWNER, ROLES.ADMIN]}>
           <CreateProductModal />
+        </RoleWrapper>
+        <RoleWrapper allowedRoles={[ROLES.OWNER, ROLES.ADMIN, ROLES.CASHIER]}>
+          <PreviewProductModal />
         </RoleWrapper>
       </>
     );
