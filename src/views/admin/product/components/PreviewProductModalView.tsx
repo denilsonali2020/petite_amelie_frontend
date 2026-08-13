@@ -207,7 +207,7 @@ export default function PreviewProductModalView({
                 </span>
 
                 <div className="mt-1 text-xl font-black text-slate-800">
-                  L. {formatCurrency(data.price)}
+                  {formatCurrency(data.price)}
                 </div>
               </div>
 
@@ -218,7 +218,7 @@ export default function PreviewProductModalView({
                 </span>
 
                 <div className="mt-1 text-xl font-black text-slate-700">
-                  L. {formatCurrency(data.cost)}
+                  {formatCurrency(data.cost)}
                 </div>
               </div>
             </div>
@@ -232,7 +232,7 @@ export default function PreviewProductModalView({
                   </span>
 
                   <div className="mt-0.5 text-xl font-black text-pink-600">
-                    L. {formatCurrency(data.discountPrice)}
+                    {formatCurrency(data.discountPrice)}
                   </div>
                 </div>
 
