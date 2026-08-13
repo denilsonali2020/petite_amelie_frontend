@@ -6,7 +6,6 @@ import {
   ShoppingBagIcon,
   XMarkIcon,
   UserIcon,
-  HeartIcon,
   EnvelopeIcon,
   PhoneIcon,
   MapPinIcon,
@@ -62,7 +61,7 @@ export default function PublicLayout() {
   const [open, setOpen] = useState<boolean>(false);
   const [openSection, setOpenSection] = useState<number | null>(null);
 
-  //NAVIGATION
+  // NAVIGATION
   const { data, isLoading, isError } = useQuery({
     queryKey: ["navigation"],
     queryFn: () => navigation(),
@@ -78,40 +77,40 @@ export default function PublicLayout() {
       <div className="bg-white min-h-screen flex flex-col antialiased text-black font-sans">
         {/* Top Banner (Envío gratis - Fondo negro) */}
         <div className="bg-black flex h-10 items-center justify-center px-4 sm:px-6 lg:px-8 cursor-pointer group">
-          <p className="text-xs font-bold tracking-widest text-white uppercase group-hover:text-gray-300 transition-colors">
+          <p className="text-xs font-bold tracking-widest text-white uppercase group-hover:text-gray-300 transition-colors text-center">
             PRODUCTO IMPORTADO DE COREA, NOSOTROS NO JUGAMOS CON TU PIEL
           </p>
         </div>
 
         {/* Header Principal Estilo Amazon */}
         <header className="relative bg-white border-b border-gray-200 z-40">
-          {/* FILA 1: Logo, Buscador Central e Iconos */}
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-2 flex items-center justify-between gap-4">
-            {/* Menú Hamburguesa (Móvil) */}
-            <div className="flex lg:hidden">
+          {/* FILA 1: Logo, Buscador Central (Desktop/Tablet) y Acciones (Usuario + Carrito) */}
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-2 flex items-center justify-between gap-3 md:gap-4">
+            {/* Menú Hamburguesa (Móvil - Se oculta en Tablet/PC) */}
+            <div className="flex md:hidden shrink-0">
               <button
                 type="button"
                 onClick={() => setOpen(true)}
-                className="p-2 text-black border border-transparent hover:border-black rounded-xs transition-all"
+                className="p-1.5 text-black border border-transparent hover:border-black rounded-xs transition-all"
               >
                 <Bars3Icon aria-hidden="true" className="size-6" />
               </button>
             </div>
 
-            {/* LOGO (Con recuadro de enfoque estilo Amazon) */}
+            {/* LOGO */}
             <div className="shrink-0 flex items-center">
               <Link
                 to="/"
-                className="border border-transparent hover:border-black px-2 py-1.5 rounded-xs transition-all flex items-center"
+                className="border border-transparent hover:border-black px-1.5 md:px-2 py-1 rounded-xs transition-all flex items-center"
               >
-                <span className="text-3xl font-black tracking-tighter text-black uppercase">
+                <span className="text-xl md:text-2xl font-black tracking-tighter text-black uppercase">
                   P_Amelie
                 </span>
               </Link>
             </div>
 
-            {/* BUSCADOR CENTRAL */}
-            <div className="hidden lg:flex relative flex-1 max-w-2xl mx-8">
+            {/* BUSCADOR CENTRAL (Se muestra desde Tablet/PC) */}
+            <div className="hidden md:flex relative flex-1 max-w-2xl mx-4 lg:mx-8">
               <input
                 type="text"
                 placeholder="Buscar en P_Amelie"
@@ -120,29 +119,21 @@ export default function PublicLayout() {
               <MagnifyingGlassIcon className="absolute right-3 top-2.5 size-5 text-black" />
             </div>
 
-            {/* ICONOS DERECHA (Cada uno con su recuadro individual al hacer hover) */}
-            <div className="flex items-center gap-2 lg:gap-3">
-              <button className="lg:hidden p-2 text-black border border-transparent hover:border-black rounded-xs transition-all">
-                <MagnifyingGlassIcon className="size-6" />
-              </button>
-
+            {/* ACCIONES DERECHA: Usuario ("Identifícate") y Carrito */}
+            <div className="flex items-center gap-1 sm:gap-3 shrink-0">
               <Link
                 to="/login"
-                className="p-2 text-black border border-transparent hover:border-black rounded-xs transition-all block"
+                className="p-1.5 md:p-2 text-black border border-transparent hover:border-black rounded-xs transition-all flex items-center gap-1.5"
               >
-                <UserIcon className="size-6" />
-              </Link>
-
-              <Link
-                to="/wishlist"
-                className="p-2 text-black border border-transparent hover:border-black rounded-xs transition-all block"
-              >
-                <HeartIcon className="size-6" />
+                <UserIcon className="size-6 shrink-0" />
+                <span className="text-xs font-bold text-black leading-tight">
+                  Identifícate
+                </span>
               </Link>
 
               <Link
                 to="/carrito"
-                className="p-2 text-black border border-transparent hover:border-black rounded-xs transition-all relative flex items-center"
+                className="p-1.5 md:p-2 text-black border border-transparent hover:border-black rounded-xs transition-all relative flex items-center"
               >
                 <ShoppingBagIcon className="size-6" />
                 <span className="absolute top-1 right-1 bg-red-600 text-[9px] font-bold text-white rounded-full h-4 w-4 flex items-center justify-center">
@@ -152,10 +143,22 @@ export default function PublicLayout() {
             </div>
           </div>
 
-          {/* FILA 2: Barra de enlaces inferior (Desktop) */}
-          <div className="border-t border-gray-100 hidden lg:block bg-white">
+          {/* BUSCADOR PARA MÓVIL (Visible solo en dispositivos móviles, se oculta en Tablet) */}
+          <div className="md:hidden px-4 pb-2.5 pt-0.5">
+            <div className="relative w-full">
+              <input
+                type="text"
+                placeholder="Buscar en P_Amelie"
+                className="w-full bg-gray-100 text-[13px] font-medium text-black placeholder-gray-500 py-2 pl-4 pr-10 border border-transparent hover:border-gray-300 focus:border-black focus:bg-white focus:outline-none transition-colors rounded-xs"
+              />
+              <MagnifyingGlassIcon className="absolute right-3 top-2.5 size-5 text-black" />
+            </div>
+          </div>
+
+          {/* FILA 2: Barra de enlaces inferior (Se muestra desde Tablet/PC) */}
+          <div className="border-t border-gray-100 hidden md:block bg-white">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-1 flex items-center gap-3 text-xs font-semibold text-gray-800">
-              {/* BOTÓN TODO (Estático con recuadro Amazon) */}
+              {/* BOTÓN TODO */}
               <button
                 onClick={() => setOpen(true)}
                 className="flex items-center gap-1.5 text-sm font-bold uppercase text-black border border-transparent hover:border-black px-2.5 py-1.5 rounded-xs transition-all"
@@ -164,7 +167,7 @@ export default function PublicLayout() {
                 Todo
               </button>
 
-              {/* Enlaces de categorías con efecto border-hover perimetral */}
+              {/* Enlaces de categorías */}
               <Link
                 to="/novedades"
                 className="border border-transparent hover:border-black px-2.5 py-1.5 rounded-xs transition-all hover:text-black"
@@ -221,7 +224,48 @@ export default function PublicLayout() {
                 <h2 className="text-lg font-bold">Hola, Identifícate</h2>
               </div>
 
+              {/* Sección de Accesos Rápidos (Se oculta en Tablet/PC) */}
+              <div className="bg-gray-50 border-b border-gray-200 py-3 px-6 md:hidden">
+                <p className="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-2">
+                  Destacados
+                </p>
+                <div className="flex flex-col gap-2">
+                  <Link
+                    to="/novedades"
+                    onClick={() => setOpen(false)}
+                    className="text-sm font-semibold text-black hover:underline"
+                  >
+                    Novedades
+                  </Link>
+                  <Link
+                    to="/mas-vendidos"
+                    onClick={() => setOpen(false)}
+                    className="text-sm font-semibold text-black hover:underline"
+                  >
+                    Más Vendidos
+                  </Link>
+                  <Link
+                    to="/ofertas"
+                    onClick={() => setOpen(false)}
+                    className="text-sm font-semibold text-black hover:underline"
+                  >
+                    Ofertas
+                  </Link>
+                  <Link
+                    to="#"
+                    onClick={() => setOpen(false)}
+                    className="text-sm font-semibold text-black hover:underline"
+                  >
+                    Marcas
+                  </Link>
+                </div>
+              </div>
+
+              {/* Categorías Dinámicas */}
               <div className="flex-1 overflow-y-auto">
+                <p className="text-[11px] font-bold text-gray-400 uppercase tracking-wider px-6 pt-4 mb-1 md:hidden">
+                  Categorías
+                </p>
                 {data.map((section, index) => (
                   <div key={section.name} className="border-b border-gray-100">
                     <button
@@ -256,6 +300,7 @@ export default function PublicLayout() {
                             <Link
                               key={item.uuid}
                               to="#"
+                              onClick={() => setOpen(false)}
                               className="block px-10 py-2.5 text-sm font-medium text-gray-500 hover:text-black hover:bg-gray-100 transition-colors duration-200"
                             >
                               {item.name}
