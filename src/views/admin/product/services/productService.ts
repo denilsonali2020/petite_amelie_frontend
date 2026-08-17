@@ -5,6 +5,7 @@ import {
   getProductOrderSchema,
   getProductsByCategorySchema,
   getProductSchema,
+  searchProductSchema,
   type editProductFormType,
   type getProductOrderType,
   type globalProductType,
@@ -91,6 +92,23 @@ export async function getProductOrder({ sku }: getProductOrderType) {
     const url = `/products/${sku}/order`;
     const { data } = await api.post(url);
     const response = getProductOrderSchema.safeParse(data);
+    if (response.success) {
+      return response.data;
+    }
+  } catch (error) {
+    if (isAxiosError(error) && error.response) {
+      throw new Error(error.response.data.error || "Hubo un error");
+    }
+  }
+}
+
+export async function searchProduct(p: string) {
+  try {
+    const url = `/products/search`;
+    const { data } = await api.get(url, {
+      params: { p },
+    });
+    const response = searchProductSchema.safeParse(data);
     if (response.success) {
       return response.data;
     }

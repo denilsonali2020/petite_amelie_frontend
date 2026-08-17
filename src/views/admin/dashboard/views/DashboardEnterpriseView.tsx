@@ -1,7 +1,7 @@
-import MonthlySalesChart from "../components/MonthlySalesChart"; // <-- Ajusta la ruta
-import RecentOrdersTable from "../components/RecentOrdersTable"; // <-- Ajusta la ruta
-import TopSubcategoriesChart from "../components/TopSubcategoriesChart"; // <-- Ajusta la ruta
-import TopProductsTable from "../components/TopProductsTable"; // <-- Ajusta la ruta
+import MonthlySalesChart from "../components/MonthlySalesChart";
+import RecentOrdersTable from "../components/RecentOrdersTable";
+import TopSubcategoriesChart from "../components/TopSubcategoriesChart";
+import TopProductsTable from "../components/TopProductsTable";
 
 export default function DashboardEnterpriseView() {
   return (

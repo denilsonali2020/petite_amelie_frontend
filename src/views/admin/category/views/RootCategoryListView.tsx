@@ -15,6 +15,7 @@ import CreateRootCategoryModal from "../components/rootCategory/CreateRootCatego
 import DeleteRootCategoryModal from "../components/rootCategory/DeleteRootCategoryModal";
 import RoleWrapper from "@/components/guards/RoleWrapper";
 import LoadingAdminSite from "@/components/reusable/LoadingAdminSite";
+import SearchBar from "../components/SearchBar";
 
 // Importamos el Wrapper de Roles
 
@@ -72,7 +73,8 @@ export default function RootCategoryListView() {
             </RoleWrapper>
           </div>
         </div>
-
+        {/* Barra de Busqueda */}
+        <SearchBar />
         {/* Contenido de Tabla */}
         <div className="mt-8 flow-root">
           <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">

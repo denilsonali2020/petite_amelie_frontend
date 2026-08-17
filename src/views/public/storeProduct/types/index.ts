@@ -2,7 +2,7 @@ import { z } from "zod";
 
 // --- SCHEMAS PRINCIPALES ---
 
-export const searchProductSchema = z.object({
+export const findProductSchema = z.object({
   name: z.string(),
   description: z.string(),
   price: z.number(),
@@ -17,4 +17,4 @@ export const searchProductSchema = z.object({
   ),
 });
 
-export type searchProductType = z.infer<typeof searchProductSchema>
+export type findProductType = z.infer<typeof findProductSchema>

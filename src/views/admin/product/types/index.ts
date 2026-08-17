@@ -103,7 +103,7 @@ export const createProductSchema = globalProductSchema
 // --- SCHEMA PARA LAS IMÁGENES (Referencia interna) ---
 export const createImagesSchema = z.array(
   z.object({
-    url: z.string().url(),
+    url: z.string(),
     isPrimary: z.boolean(),
   }),
 );
@@ -144,6 +144,18 @@ export const getProductOrderSchema = globalProductSchema.pick({
   discountPrice: true,
   isOnDiscount: true,
 });
+
+//Schema para el buscador de productos en la administracion
+export const searchProductSchema = z.array(
+  globalProductSchema
+    .pick({
+      uuid: true,
+      name: true,
+      sku: true,
+      isActive: true,
+    })
+    .extend({ images: z.string() }),
+);
 
 // Type para los datos del formulario (lo que envías al backend)
 export type createProductType = z.infer<typeof createProductSchema>;
