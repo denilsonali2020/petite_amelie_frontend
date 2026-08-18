@@ -49,12 +49,9 @@ export const getProductsByCategorySchema = z.object({
         isActive: true,
       })
       .extend({
-        images: globalProductImageSchema
-          .pick({
-            url: true,
-            isPrimary: true,
-          })
-          .nullable(), // Agregado nullable por si un producto no tiene imagen
+        images: globalProductImageSchema.pick({
+          url: true,
+        }),
       }),
   ),
   meta: z.object({
