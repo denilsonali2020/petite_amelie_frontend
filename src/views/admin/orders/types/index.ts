@@ -65,6 +65,8 @@ export const getOrdersSchema = z.object({
     totalPages: z.number(),
     currentPage: z.number(),
     limit: z.number(),
+    hasNextPage: z.boolean(),
+    hasPreviousPage: z.boolean(),
   }),
 });
 
