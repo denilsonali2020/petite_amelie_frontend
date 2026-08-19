@@ -22,7 +22,7 @@ export default function OrderListView() {
   const { page, limit, setPage, setLimit } = usePagination();
 
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["orders", page, limit], // Agregamos limit al queryKey
+    queryKey: ["orders", page, limit],
     queryFn: () => getOrders(page, limit),
     retry: false,
   });
