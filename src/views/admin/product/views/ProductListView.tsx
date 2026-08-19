@@ -3,7 +3,6 @@ import {
   useParams,
   useNavigate,
   useLocation,
-  useSearchParams,
   Navigate,
 } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
@@ -17,94 +16,77 @@ import {
   EyeSlashIcon,
   StarIcon,
   GiftIcon,
-  ArrowLongLeftIcon,
-  ArrowLongRightIcon,
 } from "@heroicons/react/20/solid";
 import { getProductsByCategory } from "../services/productService.ts";
 import CreateProductModal from "../components/productComponents/CreateProductModal.tsx";
-import { formatCurrency } from "@/shared/utils";
-
-// Componente para mostrar u ocultar elementos según el rol del usuario
-import RoleWrapper from "@/components/guards/RoleWrapper.tsx";
-import { generatePagination } from "../utils/index.ts";
-import { ROLES } from "../../user/types/index.ts";
 import PreviewProductModal from "../components/PreviewProductModal.tsx";
+import RoleWrapper from "@/components/guards/RoleWrapper.tsx";
+import { ROLES } from "../../user/types/index.ts";
+import { formatCurrency } from "@/shared/utils";
+import { usePagination } from "../../../../hooks/usePagination.ts";
+import Pagination from "@/components/reusable/Pagination.tsx";
 
 export default function ProductListView() {
   const navigate = useNavigate();
   const location = useLocation();
   const params = useParams();
+
   const subCategoryId = params.subCategoryId!;
   const rootCategoryId = params.rootCategoryId!;
 
-  // --- LECTURA DE URL ---
-  const [searchParams, setSearchParams] = useSearchParams();
+  // PAGINACIÓN
 
-  let page = parseInt(searchParams.get("page") || "1", 10);
-  if (page < 1 || isNaN(page)) page = 1;
+  const { page, limit, setPage, setLimit } = usePagination();
 
-  let limit = parseInt(searchParams.get("limit") || "10", 10);
-  if (![10, 25, 50, 100].includes(limit)) limit = 10;
-
-  // --- MANEJADORES DE PAGINACIÓN ---
-  const handlePageChange = (newPage: number) => {
-    setSearchParams((prev) => {
-      prev.set("page", newPage.toString());
-      return prev;
-    });
-  };
-
-  const handleLimitChange = (newLimit: number) => {
-    setSearchParams((prev) => {
-      prev.set("limit", newLimit.toString());
-      prev.set("page", "1");
-      return prev;
-    });
-  };
-
-  // --- QUERY ---
   const { data, isLoading, isError } = useQuery({
     queryKey: ["products", subCategoryId, page, limit],
+
     queryFn: () => getProductsByCategory(subCategoryId, page, limit),
+
     retry: false,
   });
 
-  // Efecto redirección antibugs
+  // CORRECCIÓN DE PÁGINA FUERA DE RANGO
+
   useEffect(() => {
-    if (data && data.meta.totalPages > 0) {
-      if (page > data.meta.totalPages) {
-        handlePageChange(data.meta.totalPages);
-      }
+    if (data && data.meta.totalPages > 0 && page > data.meta.totalPages) {
+      setPage(data.meta.totalPages);
     }
-  }, [data, page]);
+  }, [data, page, setPage]);
 
   const isRedirecting =
     data && data.meta.totalPages > 0 && page > data.meta.totalPages;
 
-  if (isLoading || isRedirecting)
+  // UTILIDAD PARA ABRIR MODALES SIN PERDER PAGE Y LIMIT
+
+  const navigateWithSearchParam = (key: string, value: string) => {
+    const searchParams = new URLSearchParams(location.search);
+
+    searchParams.set(key, value);
+
+    navigate(`${location.pathname}?${searchParams.toString()}`);
+  };
+
+  if (isLoading) {
     return (
       <div className="flex h-96 items-center justify-center">
         <div className="flex flex-col items-center gap-3">
           <div className="h-10 w-10 border-4 border-rose-100 border-t-rose-500 animate-spin rounded-full" />
+
           <span className="text-sm font-medium text-gray-400 uppercase tracking-widest">
             {isRedirecting ? "Redirigiendo..." : "Cargando Productos..."}
           </span>
         </div>
       </div>
     );
+  }
 
-  if (isError) return <Navigate to={"/404"} />;
-
-  // Calculamos las páginas a mostrar basándonos en los datos y la nueva función
-  const paginationItems = data
-    ? generatePagination(page, data.meta.totalPages)
-    : [];
+  if (isError) return <Navigate to="/404" />;
 
   if (data)
     return (
       <>
         <div className="py-8 px-4 max-w-7xl mx-auto">
-          {/* Botón Regresar */}
           <button
             onClick={() =>
               navigate(`/admin/category/${rootCategoryId}/sub-categories`)
@@ -115,36 +97,35 @@ export default function ProductListView() {
             Volver a Subcategorías
           </button>
 
-          {/* Header Sección */}
           <div className="sm:flex sm:items-center border-b border-gray-100 pb-8">
             <div className="sm:flex-auto">
               <div className="flex items-center gap-3">
                 <div className="p-2.5 bg-rose-50 rounded-xl">
                   <ShoppingBagIcon className="h-6 w-6 text-rose-500" />
                 </div>
+
                 <div className="flex flex-wrap items-baseline gap-2">
                   <h1 className="text-2xl font-bold text-gray-900 tracking-tight">
                     Productos en
                   </h1>
+
                   <span className="text-2xl font-serif italic text-pink-600">
                     {data.name}
                   </span>
                 </div>
               </div>
+
               <p className="mt-2 text-sm text-gray-500 font-light">
                 Gestiona el inventario, precios y detalles de los productos de
                 esta subcategoría.
               </p>
             </div>
 
-            {/* OCULTAR BOTÓN DE NUEVO PRODUCTO AL CAJERO */}
             <RoleWrapper allowedRoles={[ROLES.OWNER, ROLES.ADMIN]}>
               <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
                 <button
                   type="button"
-                  onClick={() =>
-                    navigate(location.pathname + "?newProduct=true")
-                  }
+                  onClick={() => navigateWithSearchParam("newProduct", "true")}
                   className="inline-flex items-center justify-center rounded-lg bg-pink-600 px-5 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-pink-700 transition-colors active:scale-95 cursor-pointer"
                 >
                   <PlusIcon
@@ -157,7 +138,6 @@ export default function ProductListView() {
             </RoleWrapper>
           </div>
 
-          {/* Tabla de Productos Compacta */}
           <div className="mt-6 flow-root">
             <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
               <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
@@ -168,23 +148,29 @@ export default function ProductListView() {
                         <th className="py-3 pl-4 pr-3 text-left text-[10px] font-bold uppercase tracking-widest text-gray-400">
                           Producto
                         </th>
+
                         <th className="px-3 py-3 text-left text-[10px] font-bold uppercase tracking-widest text-gray-400">
                           Precio de Costo
                         </th>
+
                         <th className="px-3 py-3 text-left text-[10px] font-bold uppercase tracking-widest text-gray-400">
                           Precio / Valor
                         </th>
+
                         <th className="px-3 py-3 text-left text-[10px] font-bold uppercase tracking-widest text-gray-400">
                           Stock
                         </th>
+
                         <th className="px-3 py-3 text-left text-[10px] font-bold uppercase tracking-widest text-gray-400">
                           Visibilidad
                         </th>
-                        <th className="px-3 py-3  text-[10px] font-bold uppercase tracking-widest text-gray-400">
+
+                        <th className="px-3 py-3 text-[10px] font-bold uppercase tracking-widest text-gray-400">
                           Acciones
                         </th>
                       </tr>
                     </thead>
+
                     <tbody className="divide-y divide-gray-50 bg-white">
                       {data.data && data.data.length > 0 ? (
                         data.data.map((product) => (
@@ -207,10 +193,12 @@ export default function ProductListView() {
                                     </div>
                                   )}
                                 </div>
+
                                 <div className="ml-3">
                                   <div className="text-sm font-bold text-gray-800 group-hover:text-rose-600 transition-colors leading-none">
                                     {product.name}
                                   </div>
+
                                   <div className="flex items-center gap-2 mt-1">
                                     <span className="text-[9px] font-mono text-gray-400 uppercase bg-gray-50 px-1 rounded border border-gray-100">
                                       {product.sku || "N/A"}
@@ -218,7 +206,7 @@ export default function ProductListView() {
 
                                     {product.isReward && (
                                       <span className="inline-flex items-center gap-0.5 text-[9px] font-bold text-amber-600 bg-amber-50 px-1 rounded border border-amber-100">
-                                        <StarIcon className="h-2.5 w-2.5" />{" "}
+                                        <StarIcon className="h-2.5 w-2.5" />
                                         {product.pointsValue} pts
                                       </span>
                                     )}
@@ -240,6 +228,7 @@ export default function ProductListView() {
                                 {product.isReward ? (
                                   <div className="flex items-center gap-1">
                                     <GiftIcon className="h-3.5 w-3.5 text-amber-500" />
+
                                     <span className="text-[10px] font-bold text-amber-700 uppercase tracking-tighter">
                                       Regalía
                                     </span>
@@ -247,9 +236,9 @@ export default function ProductListView() {
                                 ) : product.isOnDiscount ? (
                                   <>
                                     <span className="text-sm font-bold text-rose-600">
-                                      {" "}
                                       {formatCurrency(product.discountPrice!)}
                                     </span>
+
                                     <span className="text-[10px] text-gray-400 line-through">
                                       {formatCurrency(product.price)}
                                     </span>
@@ -265,10 +254,19 @@ export default function ProductListView() {
                             <td className="whitespace-nowrap px-3 py-2.5">
                               <div className="flex items-center gap-1.5">
                                 <div
-                                  className={`h-1.5 w-1.5 rounded-full ${product.stock > 0 ? "bg-green-400" : "bg-rose-400 animate-pulse"}`}
+                                  className={`h-1.5 w-1.5 rounded-full ${
+                                    product.stock > 0
+                                      ? "bg-green-400"
+                                      : "bg-rose-400 animate-pulse"
+                                  }`}
                                 />
+
                                 <span
-                                  className={`text-sm font-semibold ${product.stock === 0 ? "text-rose-500" : "text-gray-600"}`}
+                                  className={`text-sm font-semibold ${
+                                    product.stock === 0
+                                      ? "text-rose-500"
+                                      : "text-gray-600"
+                                  }`}
                                 >
                                   {product.stock}{" "}
                                   <span className="text-[10px] font-normal text-gray-400 uppercase">
@@ -281,16 +279,16 @@ export default function ProductListView() {
                             <td className="whitespace-nowrap px-3 py-2.5">
                               {product.isActive ? (
                                 <span className="inline-flex items-center gap-1 rounded-md bg-green-50 px-1.5 py-0.5 text-[9px] font-bold text-green-700 ring-1 ring-inset ring-green-600/20 uppercase">
-                                  <EyeIcon className="h-3 w-3" /> Visible
+                                  <EyeIcon className="h-3 w-3" />
+                                  Visible
                                 </span>
                               ) : (
                                 <span className="inline-flex items-center gap-1 rounded-md bg-gray-50 px-1.5 py-0.5 text-[9px] font-bold text-gray-500 ring-1 ring-inset ring-gray-600/20 uppercase">
-                                  <EyeSlashIcon className="h-3 w-3" /> Oculto
+                                  <EyeSlashIcon className="h-3 w-3" />
+                                  Oculto
                                 </span>
                               )}
                             </td>
-
-                            {/* ACCIONES */}
                             <td className="relative whitespace-nowrap py-2.5 px-3">
                               <div className="flex items-center justify-center gap-2">
                                 <RoleWrapper
@@ -304,9 +302,9 @@ export default function ProductListView() {
                                     type="button"
                                     className="flex h-8 w-8 items-center justify-center rounded-md text-gray-400 transition-all hover:bg-blue-50 hover:text-blue-500 cursor-pointer"
                                     onClick={() =>
-                                      navigate(
-                                        location.pathname +
-                                          `?productPreview=${product.uuid}`,
+                                      navigateWithSearchParam(
+                                        "productPreview",
+                                        product.uuid,
                                       )
                                     }
                                     title="Preview"
@@ -348,103 +346,17 @@ export default function ProductListView() {
                     </tbody>
                   </table>
 
-                  {/* --- COMPONENTE DE PAGINACIÓN Y LIMITES --- */}
                   {data.meta.totalProducts > 0 && (
-                    <nav className="flex flex-col sm:flex-row items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6 gap-4">
-                      {/* Selector de Límite y Conteo Total */}
-                      <div className="flex items-center gap-4 text-sm text-gray-500 w-full sm:w-auto justify-between sm:justify-start">
-                        <div className="flex items-center gap-2">
-                          <label htmlFor="limit-select" className="font-medium">
-                            Mostrar:
-                          </label>
-                          <select
-                            id="limit-select"
-                            value={limit}
-                            onChange={(e) =>
-                              handleLimitChange(Number(e.target.value))
-                            }
-                            className="rounded-md border-gray-300 py-1 pl-2 pr-8 text-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 cursor-pointer"
-                          >
-                            <option value={10}>10</option>
-                            <option value={25}>25</option>
-                            <option value={50}>50</option>
-                            <option value={100}>100</option>
-                          </select>
-                        </div>
-                        <span className="hidden sm:inline">
-                          Total:{" "}
-                          <span className="font-bold text-gray-700">
-                            {data.meta.totalProducts}
-                          </span>{" "}
-                          productos
-                        </span>
-                      </div>
-
-                      {/* Paginador */}
-                      {data.meta.totalPages > 1 && (
-                        <div className="flex w-full sm:w-auto items-center justify-between sm:justify-end gap-2">
-                          <div className="-mt-px flex">
-                            <button
-                              onClick={() => handlePageChange(page - 1)}
-                              disabled={page === 1}
-                              className="inline-flex items-center border-t-2 border-transparent pr-1 pt-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:border-transparent disabled:hover:text-gray-500 cursor-pointer"
-                            >
-                              <ArrowLongLeftIcon
-                                aria-hidden="true"
-                                className="mr-3 h-5 w-5 text-gray-400 hover:text-indigo-500 transition-colors"
-                              />
-                            </button>
-                          </div>
-
-                          {/* Renderizado Inteligente de Páginas */}
-                          <div className="hidden md:-mt-px md:flex">
-                            {paginationItems.map((item, index) => {
-                              if (item === "...") {
-                                return (
-                                  <span
-                                    key={`ellipsis-${index}`}
-                                    className="inline-flex items-center border-t-2 border-transparent px-4 pt-4 text-sm font-medium text-gray-500"
-                                  >
-                                    ...
-                                  </span>
-                                );
-                              }
-
-                              const pageNum = item as number;
-                              return (
-                                <button
-                                  key={`page-${pageNum}`}
-                                  onClick={() => handlePageChange(pageNum)}
-                                  aria-current={
-                                    page === pageNum ? "page" : undefined
-                                  }
-                                  className={`inline-flex items-center border-t-2 px-4 pt-4 text-sm font-medium cursor-pointer ${
-                                    page === pageNum
-                                      ? "border-pink-500 text-pink-600"
-                                      : "border-transparent text-gray-500 hover:border-pink-300 hover:text-pink-700"
-                                  }`}
-                                >
-                                  {pageNum}
-                                </button>
-                              );
-                            })}
-                          </div>
-
-                          <div className="-mt-px flex justify-end">
-                            <button
-                              onClick={() => handlePageChange(page + 1)}
-                              disabled={page === data.meta.totalPages}
-                              className="inline-flex items-center border-t-2 border-transparent pl-1 pt-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:border-transparent disabled:hover:text-gray-500 cursor-pointer"
-                            >
-                              <ArrowLongRightIcon
-                                aria-hidden="true"
-                                className="ml-3 h-5 w-5 text-gray-400 hover:text-indigo-500 transition-colors"
-                              />
-                            </button>
-                          </div>
-                        </div>
-                      )}
-                    </nav>
+                    <Pagination
+                      page={page}
+                      limit={limit}
+                      totalItems={data.meta.totalProducts}
+                      totalPages={data.meta.totalPages}
+                      hasNextPage={data.meta.hasNextPage}
+                      hasPreviousPage={data.meta.hasPreviousPage}
+                      onPageChange={setPage}
+                      onLimitChange={setLimit}
+                    />
                   )}
                 </div>
               </div>
@@ -452,10 +364,10 @@ export default function ProductListView() {
           </div>
         </div>
 
-        {/* OCULTAR MODAL DE CREACIÓN AL CAJERO */}
         <RoleWrapper allowedRoles={[ROLES.OWNER, ROLES.ADMIN]}>
           <CreateProductModal />
         </RoleWrapper>
+
         <RoleWrapper allowedRoles={[ROLES.OWNER, ROLES.ADMIN, ROLES.CASHIER]}>
           <PreviewProductModal />
         </RoleWrapper>
