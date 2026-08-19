@@ -119,7 +119,7 @@ export default function OrderListView() {
                                 <div className="flex-auto">
                                   <div className="flex items-center gap-x-3">
                                     <div className="text-sm font-bold text-gray-900">
-                                      {formatCurrency(+order.total)}
+                                      {formatCurrency(order.total)}
                                     </div>
                                     <div
                                       className={`rounded-md px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ring-1 ring-inset ${classes}`}
@@ -130,12 +130,12 @@ export default function OrderListView() {
                                   {Number(order.discountAmount) > 0 ? (
                                     <div className="mt-0.5 text-[11px] text-rose-500 font-medium">
                                       Descuento:{" "}
-                                      {formatCurrency(+order.discountAmount)}
+                                      {formatCurrency(order.discountAmount)}
                                     </div>
                                   ) : (
                                     <div className="mt-0.5 text-[11px] text-gray-500 font-medium">
                                       Descuento:{" "}
-                                      {formatCurrency(+order.discountAmount)}
+                                      {formatCurrency(order.discountAmount)}
                                     </div>
                                   )}
                                 </div>
