@@ -68,18 +68,7 @@ export default function Pagination({
           </button>
 
           <div className="hidden md:flex">
-            {pages.map((item, index) => {
-              if (item === "...") {
-                return (
-                  <span
-                    key={index}
-                    className="inline-flex items-center px-4 pt-4 text-sm text-gray-500"
-                  >
-                    ...
-                  </span>
-                );
-              }
-
+            {pages.map((item) => {
               return (
                 <button
                   key={item}

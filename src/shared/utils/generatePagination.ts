@@ -1,31 +1,28 @@
 export function generatePagination(
   currentPage: number,
-  totalPages: number
-): (number | "...")[] {
-  if (totalPages <= 7) {
+  totalPages: number,
+): number[] {
+  // si el total de paginas es 10 o igual se muestran del 1 al 10
+  if (totalPages <= 10) {
     return Array.from({ length: totalPages }, (_, i) => i + 1);
   }
 
-  const pages: (number | "...")[] = [];
+  // si no definimos el maximo de botones que queremos
+  const maxButtons = 10;
 
-  pages.push(1);
+  // calcular el inicio central calculanto la pagina actual
+  let start = currentPage - 5;
 
-  if (currentPage > 3) {
-    pages.push("...");
+  // ajustamos el inicio para que no se desborde por la izquierda
+  if (start < 1) {
+    start = 1;
   }
 
-  const start = Math.max(2, currentPage - 1);
-  const end = Math.min(totalPages - 1, currentPage + 1);
-
-  for (let i = start; i <= end; i++) {
-    pages.push(i);
+  // ajustamos el inicio si se desborda por la derecha
+  if (start + maxButtons - 1 > totalPages) {
+    start = totalPages - maxButtons + 1;
   }
 
-  if (currentPage < totalPages - 2) {
-    pages.push("...");
-  }
-
-  pages.push(totalPages);
-
-  return pages;
+  // generamos el arreglo con los 10 numeros secuenciales exactos
+  return Array.from({ length: maxButtons }, (_, i) => start + i);
 }
