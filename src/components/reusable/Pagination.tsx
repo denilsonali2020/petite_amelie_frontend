@@ -3,6 +3,7 @@ import {
   ArrowLongLeftIcon,
   ArrowLongRightIcon,
 } from "@heroicons/react/20/solid";
+import { useEffect } from "react";
 
 type PaginationProps = {
   page: number;
@@ -29,6 +30,11 @@ export default function Pagination({
   onLimitChange,
 }: PaginationProps) {
   const pages = generatePagination(page, totalPages);
+
+  //Para subir el scroll al inicio de la pagina
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [page]);
 
   return (
     <nav className="flex flex-col sm:flex-row items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6 gap-4">

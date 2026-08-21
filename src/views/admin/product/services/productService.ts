@@ -20,7 +20,7 @@ export async function getProductsByCategory(
   try {
     const url = `/products/${categoryId}/products`;
     const { data } = await api.get(url, {
-      params: { page, limit }, // Pasamos los params al backend
+      params: { page, limit },
     });
     const response = getProductsByCategorySchema.safeParse(data);
     if (response.success) {

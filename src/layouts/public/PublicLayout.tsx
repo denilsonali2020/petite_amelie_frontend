@@ -299,7 +299,7 @@ export default function PublicLayout() {
                           {section.children.map((item) => (
                             <Link
                               key={item.uuid}
-                              to="#"
+                              to={`${item.uuid}/products`}
                               onClick={() => setOpen(false)}
                               className="block px-10 py-2.5 text-sm font-medium text-gray-500 hover:text-black hover:bg-gray-100 transition-colors duration-200"
                             >

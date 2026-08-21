@@ -29,8 +29,8 @@ export async function getOrders(page: number = 1, limit: number = 10) {
     const url = `/orders`;
     const { data } = await api.get(url, {
       params: {
-        page: page,
-        limit: limit, // Se lo mandamos a Express
+        page,
+        limit,
       },
     });
 

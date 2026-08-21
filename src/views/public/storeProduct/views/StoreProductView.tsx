@@ -7,6 +7,7 @@ import LoadingWebSite from "@/components/reusable/LoadingWebSite";
 export default function StoreProductView() {
   const params = useParams();
   const productId = params.productId!;
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -37,14 +38,8 @@ export default function StoreProductView() {
 
   return (
     <div className="bg-white">
-      {/* =====================================================
-          PRODUCTO
-      ===================================================== */}
       <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-16 lg:px-8">
         <div className="grid grid-cols-1 gap-x-12 gap-y-12 lg:grid-cols-2 lg:items-start">
-          {/* =================================================
-              GALERÍA DE IMÁGENES
-          ================================================= */}
           <div className="flex flex-col-reverse gap-5 sm:flex-row">
             {/* MINIATURAS */}
             {images.length > 1 && (
@@ -115,10 +110,6 @@ export default function StoreProductView() {
               </div>
             </div>
           </div>
-
-          {/* =================================================
-              INFORMACIÓN DEL PRODUCTO
-          ================================================= */}
           <div className="lg:pt-4">
             {/* Etiqueta */}
             <p className="mb-3 text-xs font-semibold uppercase tracking-[0.2em] text-rose-500">
@@ -167,9 +158,6 @@ export default function StoreProductView() {
               )}
             </div>
 
-            {/* =================================================
-                STOCK
-            ================================================= */}
             {/* STOCK */}
             <div className="mt-5">
               {data.stock === 0 ? (
@@ -187,9 +175,6 @@ export default function StoreProductView() {
               )}
             </div>
 
-            {/* =================================================
-                DESCRIPCIÓN
-            ================================================= */}
             <div className="mt-8 border-t border-gray-100 pt-8">
               <h2 className="text-sm font-semibold uppercase tracking-wider text-gray-900">
                 Descripción
@@ -200,9 +185,6 @@ export default function StoreProductView() {
               </p>
             </div>
 
-            {/* =================================================
-                BOTÓN
-            ================================================= */}
             <div className="mt-8">
               <button
                 type="button"
@@ -221,9 +203,6 @@ export default function StoreProductView() {
               </button>
             </div>
 
-            {/* =================================================
-                INFORMACIÓN ADICIONAL
-            ================================================= */}
             <div className="mt-8 border-t border-gray-100">
               <div className="flex items-center justify-between border-b border-gray-100 py-5">
                 <div>
@@ -268,9 +247,6 @@ export default function StoreProductView() {
         </div>
       </section>
 
-      {/* =====================================================
-          SECCIÓN INFORMATIVA
-      ===================================================== */}
       <section className="border-y border-gray-100 bg-[#faf8f7]">
         <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-2xl text-center">
@@ -329,9 +305,6 @@ export default function StoreProductView() {
         </div>
       </section>
 
-      {/* =====================================================
-          CURIOSIDADES
-      ===================================================== */}
       <section className="bg-white">
         <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
           <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
@@ -401,9 +374,6 @@ export default function StoreProductView() {
         </div>
       </section>
 
-      {/* =====================================================
-          CTA FINAL
-      ===================================================== */}
       <section className="bg-gray-950">
         <div className="mx-auto max-w-4xl px-4 py-16 text-center sm:px-6 lg:px-8">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-rose-400">
