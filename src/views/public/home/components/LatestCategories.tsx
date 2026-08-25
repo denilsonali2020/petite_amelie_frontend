@@ -37,7 +37,7 @@ export default function LatestCategories() {
             {data.map((category) => (
               <Link
                 key={category.uuid}
-                to={`/productos?categoria=${category.uuid}&orden=nuevos`}
+                to={`/${category.uuid}/products`}
                 className="group relative min-h-75 overflow-hidden rounded-xs bg-neutral-900"
               >
                 <img
