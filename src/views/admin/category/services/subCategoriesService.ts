@@ -36,17 +36,15 @@ export async function createSubCategory(formData: FormData) {
 }
 
 type updateRootCategoryProps = {
-  rootCategoryId: generalCategoryType["uuid"];
   subCategoryId: generalCategoryType["uuid"];
   formData: FormData;
 };
 export async function updateSubCategory({
-  rootCategoryId,
   subCategoryId,
   formData,
 }: updateRootCategoryProps) {
   try {
-    const url = `/category/${rootCategoryId}/rootCategory/${subCategoryId}/subCategory`;
+    const url = `/category/${subCategoryId}/subCategory`;
     const { data } = await api.put<string>(url, formData);
     return data;
   } catch (error) {

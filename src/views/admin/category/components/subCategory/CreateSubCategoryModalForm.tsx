@@ -141,7 +141,7 @@ export default function CreateSubCategoryModalForm({
       {/* Campo Descripción */}
       <div className="group">
         <label className="block text-[13px] font-medium text-slate-700 mb-1.5 transition-colors group-focus-within:text-pink-600">
-          Descripción
+          Descripción <span className="opacity-60">(opcional)</span>
         </label>
         <textarea
           rows={3}
@@ -152,7 +152,6 @@ export default function CreateSubCategoryModalForm({
           }`}
           placeholder="Escribe la descripcion de la categoria"
           {...register("description", {
-            required: "La descripción es obligatoria",
             minLength: {
               value: 50,
               message: "Debe tener al menos 50 caracteres",
