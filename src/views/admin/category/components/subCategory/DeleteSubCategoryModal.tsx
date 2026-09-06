@@ -112,7 +112,7 @@ export default function DeleteSubCategoryModal() {
                   </button>
                   <button
                     type="button"
-                    onClick={() => mutate({ rootCategoryId, subCategoryId })}
+                    onClick={() => mutate(subCategoryId)}
                     disabled={isPending}
                     className={`rounded-lg bg-red-600 px-6 py-2.5 text-sm font-semibold text-white shadow-md shadow-red-200 transition-all hover:bg-red-700 active:scale-[0.98] ${isPending ? "cursor-not-allowed" : "cursor-pointer"}`}
                   >

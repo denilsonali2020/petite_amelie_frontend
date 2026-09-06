@@ -54,16 +54,11 @@ export async function updateSubCategory({
   }
 }
 
-type deleteSubCategoryProps = {
-  rootCategoryId: generalCategoryType["uuid"];
-  subCategoryId: generalCategoryType["uuid"];
-};
-export async function deleteSubCategory({
-  rootCategoryId,
-  subCategoryId,
-}: deleteSubCategoryProps) {
+export async function deleteSubCategory(
+  subCategoryId: generalCategoryType["uuid"],
+) {
   try {
-    const url = `/category/${rootCategoryId}/rootCategory/${subCategoryId}/subCategory`;
+    const url = `/category/${subCategoryId}/subCategory`;
     const { data } = await api.delete<string>(url);
     return data;
   } catch (error) {
