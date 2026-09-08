@@ -106,18 +106,12 @@ export const getOrderSchema = globalOrderSchema
       })
       .nullable(),
 
-    user: z.object({
-      name: z.string(),
-    }),
-    payment: z.object({
-      method: z.string(),
-    }),
+    user: z.string(),
+    payment: z.string(),
     orderItems: z.array(
       z.object({
-        product: z.object({
-          sku: z.string(),
-          name: z.string(),
-        }),
+        sku: z.string(),
+        name: z.string(),
         quantity: z.number(),
         discount: z.string(),
         originalPrice: z.string(),
@@ -126,9 +120,7 @@ export const getOrderSchema = globalOrderSchema
     ),
   });
 
-// ================= //
-// -- types  -- //
-// ================= //
+// types
 export type globalOrderType = z.infer<typeof globalOrderSchema>;
 
 export type orderType = z.infer<typeof getOrderSchema>;
@@ -142,9 +134,7 @@ export type SearchForm = {
   identifier: string;
 };
 
-// ================= //
-// -- orderStore  -- //
-// ================= //
+// orderStore
 export type orderBillingInfoType = {
   billingRTN: string;
   customerName: string;

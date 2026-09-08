@@ -164,7 +164,7 @@ export default function DetailOrderView() {
                 Atendido por
               </p>
               <p className="text-[13px] font-medium text-gray-800">
-                {data.user?.name || "Sistema"}
+                {data.user || "Sistema"}
               </p>
             </div>
             <div className="grid grid-cols-2 gap-3">
@@ -207,7 +207,7 @@ export default function DetailOrderView() {
                 Método
               </p>
               <p className="text-[13px] font-medium text-gray-800">
-                {data.payment?.method || "N/A"}
+                {data.payment || "N/A"}
               </p>
             </div>
             <div>
@@ -273,10 +273,10 @@ export default function DetailOrderView() {
                       >
                         <td className="whitespace-nowrap py-3 pl-4 pr-3">
                           <div className="text-[13px] font-semibold text-gray-800 group-hover:text-rose-600 transition-colors">
-                            {item.product.name}
+                            {item.name}
                           </div>
                           <div className="text-[9px] font-mono text-gray-400 uppercase mt-0.5">
-                            SKU: {item.product.sku}
+                            SKU: {item.sku}
                           </div>
                         </td>
                         <td className="whitespace-nowrap px-3 py-3 text-center text-[13px] font-medium text-gray-600">
