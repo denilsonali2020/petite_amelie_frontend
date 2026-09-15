@@ -11,6 +11,9 @@
   },
   "dependencies": {
     "@chakra-ui/pin-input": "^2.1.0",
+    "@chakra-ui/system": "^2.6.2",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
     "@headlessui/react": "^2.2.9",
     "@heroicons/react": "^2.2.0",
     "@tailwindcss/vite": "^4.1.18",
@@ -21,6 +24,7 @@
     "react-dom": "^19.2.0",
     "react-hook-form": "^7.71.1",
     "react-hot-toast": "^2.6.0",
+    "react-is": "^19.3.0",
     "react-router-dom": "^7.13.0",
     "recharts": "^3.8.1",
     "tailwindcss": "^4.1.18",
