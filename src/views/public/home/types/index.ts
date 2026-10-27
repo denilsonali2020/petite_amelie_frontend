@@ -23,7 +23,7 @@ export const newArrivalsSchema = z.array(
     price: z.number(),
     isOnDiscount: z.boolean(),
     discountPrice: z.number(),
-    images: z.string(),
+    images: z.string().nullable(),
   }),
 );
 
@@ -49,7 +49,7 @@ export const getBestSellersPerTopCategoriesSchema = z.array(
         price: z.number(),
         isOnDiscount: z.boolean(),
         discountPrice: z.number(),
-        images: z.string(),
+        images: z.string().nullable(),
       }),
     ),
   }),
@@ -66,7 +66,7 @@ export const getOffersPerTopCategoriesSchema = z.array(
         price: z.number(),
         isOnDiscount: z.boolean(),
         discountPrice: z.number(),
-        images: z.string(),
+        images: z.string().nullable(),
       }),
     ),
   }),
