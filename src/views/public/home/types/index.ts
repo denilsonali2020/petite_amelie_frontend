@@ -85,5 +85,5 @@ export type ProductCardType = {
   price: number;
   isOnDiscount: boolean;
   discountPrice: number;
-  images: string;
+  images: string | null;
 };
