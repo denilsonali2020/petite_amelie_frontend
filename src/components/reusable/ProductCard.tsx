@@ -49,7 +49,7 @@ export default function ProductCard({ product }: { product: ProductCardType }) {
 
         <div className="aspect-[4/4.3] w-full overflow-hidden">
           <img
-            src={product.images}
+            src={product.images || product.name}
             alt={product.name}
             className="
               h-full

@@ -65,7 +65,7 @@ export default function NewArrivalsView() {
 
           <div className="aspect-square w-full overflow-hidden rounded-xs bg-neutral-100">
             <img
-              src={product.images}
+              src={product.images || product.name}
               alt={product.name}
               className="h-full w-full object-cover object-center transition-opacity group-hover:opacity-90"
             />
