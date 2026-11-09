@@ -131,6 +131,8 @@ export const getProductSchema = globalProductSchema
         isPrimary: true,
       }),
     ),
+    rootCategoryId: z.string(),
+    subCategoryId: z.string(),
   });
 
 //Schema de obtener un producto para una orden

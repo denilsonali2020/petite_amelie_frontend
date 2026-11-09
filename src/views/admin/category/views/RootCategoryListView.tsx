@@ -16,6 +16,7 @@ import DeleteRootCategoryModal from "../components/rootCategory/DeleteRootCatego
 import RoleWrapper from "@/components/guards/RoleWrapper";
 import LoadingAdminSite from "@/components/reusable/LoadingAdminSite";
 import SearchBar from "../components/SearchBar";
+import PreviewProductModal from "../../product/components/PreviewProductModal";
 
 // Importamos el Wrapper de Roles
 
@@ -217,6 +218,10 @@ export default function RootCategoryListView() {
         <CreateRootCategoryModal />
         {/* Eliminar una root categori */}
         <DeleteRootCategoryModal />
+      </RoleWrapper>
+
+      <RoleWrapper allowedRoles={[ROLES.OWNER, ROLES.ADMIN, ROLES.CASHIER]}>
+        <PreviewProductModal />
       </RoleWrapper>
     </>
   );

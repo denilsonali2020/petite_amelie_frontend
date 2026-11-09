@@ -13,8 +13,7 @@ type ContextType = {
 };
 
 export default function EditProductDataView() {
-  const { data, rootCategoryId, subCategoryId, productId } =
-    useOutletContext<ContextType>();
+  const { data, productId } = useOutletContext<ContextType>();
 
   if (data)
     return (
@@ -40,12 +39,7 @@ export default function EditProductDataView() {
 
           {/* Cuerpo */}
           <div className="p-6">
-            <EditProductForm
-              data={data}
-              rootCategoryId={rootCategoryId}
-              subCategoryId={subCategoryId}
-              productId={productId}
-            />
+            <EditProductForm data={data} productId={productId} />
           </div>
         </div>
       </div>

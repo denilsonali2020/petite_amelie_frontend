@@ -12,8 +12,6 @@ import LoadingAdminSite from "@/components/reusable/LoadingAdminSite";
 
 export default function ProductEditLayout() {
   const params = useParams();
-  const rootCategoryId = params.rootCategoryId!;
-  const subCategoryId = params.subCategoryId!;
   const productId = params.productId!;
   const navigate = useNavigate();
   const location = useLocation();
@@ -22,6 +20,8 @@ export default function ProductEditLayout() {
     queryKey: ["product", productId],
     queryFn: () => getProduct(productId),
   });
+
+  const goBack = `/admin/category/${data?.rootCategoryId}/category/${data?.subCategoryId}/products${location.search}`;
 
   if (isLoading) return <LoadingAdminSite />;
 
@@ -36,7 +36,7 @@ export default function ProductEditLayout() {
         <button
           onClick={() =>
             navigate(
-              `/admin/category/${rootCategoryId}/category/${subCategoryId}/products${location.search}`,
+              goBack
             )
           }
           className="group flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-gray-400 hover:text-pink-600 transition-colors cursor-pointer"
@@ -99,7 +99,7 @@ export default function ProductEditLayout() {
         {/* CONTENIDO DINÁMICO: Aquí se inyecta el Form o la Galería */}
         <div className="mt-6">
           <Outlet
-            context={{ data, rootCategoryId, subCategoryId, productId }}
+            context={{ data, productId }}
           />
         </div>
       </div>

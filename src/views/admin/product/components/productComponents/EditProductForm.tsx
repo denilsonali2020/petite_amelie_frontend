@@ -8,7 +8,7 @@ import {
   CurrencyDollarIcon,
   DocumentTextIcon,
 } from "@heroicons/react/20/solid";
-import { useLocation, useNavigate } from "react-router-dom"; // <-- IMPORTAMOS useLocation
+import { useLocation, useNavigate } from "react-router-dom";
 
 import ErrorMessage from "@/components/ui/ErrorMessage.tsx";
 import type {
@@ -16,20 +16,15 @@ import type {
   getProductType,
   globalProductType,
 } from "../../types/index.ts";
-import type { generalCategoryType } from "@/views/admin/category/types/index.ts";
 import { updateProduct } from "../../services/productService.ts";
 
 type EditProductFormProps = {
   data: getProductType;
-  rootCategoryId: generalCategoryType["uuid"];
-  subCategoryId: generalCategoryType["uuid"];
   productId: globalProductType["uuid"];
 };
 
 export default function EditProductForm({
   data,
-  rootCategoryId,
-  subCategoryId,
   productId,
 }: EditProductFormProps) {
   const queryClient = useQueryClient();
@@ -63,6 +58,7 @@ export default function EditProductForm({
   const isReward = watch("isReward");
   const isActive = watch("isActive");
   const isOnDiscount = watch("isOnDiscount");
+  const goBack = `/admin/category/${data?.rootCategoryId}/category/${data?.subCategoryId}/products${location.search}`;
 
   // Bloqueo de caracteres científicos en inputs numéricos
   const blockInvalidChar = (e: React.KeyboardEvent) =>
@@ -89,15 +85,14 @@ export default function EditProductForm({
       toast.error(error.message, { id: "productError" });
     },
     onSuccess: (responseData) => {
-      queryClient.invalidateQueries({ queryKey: ["products", subCategoryId] });
+      queryClient.invalidateQueries({
+        queryKey: ["products", data.subCategoryId],
+      });
       queryClient.invalidateQueries({ queryKey: ["product", productId] });
       toast.success(responseData || "Producto Actualizado", {
         id: "productSuccess",
       });
-      // <-- 1. CORRECCIÓN AQUÍ: Agregamos location.search al onSuccess
-      navigate(
-        `/admin/category/${rootCategoryId}/category/${subCategoryId}/products${location.search}`,
-      );
+      navigate(goBack);
     },
   });
 
@@ -455,11 +450,7 @@ export default function EditProductForm({
       <div className="flex items-center justify-end gap-4 pt-4 border-t border-slate-200 mt-4">
         <button
           type="button"
-          onClick={() =>
-            navigate(
-              `/admin/category/${rootCategoryId}/category/${subCategoryId}/products${location.search}`,
-            )
-          }
+          onClick={() => navigate(goBack)}
           className="px-6 py-2.5 text-sm font-bold text-slate-400 hover:text-slate-600 transition-colors cursor-pointer"
         >
           Cancelar

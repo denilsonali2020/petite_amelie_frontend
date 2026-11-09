@@ -1,10 +1,5 @@
 import { useEffect } from "react";
-import {
-  useParams,
-  useNavigate,
-  useLocation,
-  Navigate,
-} from "react-router-dom";
+import { useParams, useNavigate, Navigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import {
   PlusIcon,
@@ -26,11 +21,12 @@ import { formatCurrency } from "@/shared/utils";
 import { usePagination } from "../../../../hooks/usePagination.ts";
 import Pagination from "@/components/reusable/Pagination.tsx";
 import LoadingAdminSite from "@/components/reusable/LoadingAdminSite.tsx";
+import { useNavigateWithSearchParam } from "../../../../hooks/useNavigate.ts";
 
 export default function ProductListView() {
   const navigate = useNavigate();
-  const location = useLocation();
   const params = useParams();
+  const navigateWithSearchParam = useNavigateWithSearchParam();
 
   const subCategoryId = params.subCategoryId!;
   const rootCategoryId = params.rootCategoryId!;
@@ -51,14 +47,6 @@ export default function ProductListView() {
       setPage(data.meta.totalPages);
     }
   }, [data, page, setPage]);
-
-  // UTILIDAD PARA ABRIR MODALES SIN PERDER PAGE Y LIMIT
-
-  const navigateWithSearchParam = (key: string, value: string) => {
-    const searchParams = new URLSearchParams(location.search);
-    searchParams.set(key, value);
-    navigate(`${location.pathname}?${searchParams.toString()}`);
-  };
 
   if (isLoading) return <LoadingAdminSite />;
 
@@ -302,7 +290,7 @@ export default function ProductListView() {
                                     className="flex h-8 w-8 items-center justify-center rounded-md text-gray-400 transition-all hover:bg-blue-50 hover:text-blue-500 cursor-pointer"
                                     onClick={() =>
                                       navigate(
-                                        `/admin/category/${rootCategoryId}/category/${subCategoryId}/sub-category/${product.uuid}/edit${location.search}`,
+                                        `/admin/product/${product.uuid}/edit`,
                                       )
                                     }
                                     title="Editar"

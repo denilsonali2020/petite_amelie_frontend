@@ -5,15 +5,17 @@ import {
   ChevronRightIcon,
 } from "@heroicons/react/20/solid";
 import { ShoppingBagIcon } from "@heroicons/react/24/outline";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { searchProduct } from "../../product/services/productService";
+import { useNavigateWithSearchParam } from "../../../../hooks/useNavigate";
 
 export default function SearchBar() {
   const [searchTerm, setSearchTerm] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
-  const navigate = useNavigate();
+
+  const navigateWithSearchParam = useNavigateWithSearchParam();
 
   // Cerrar al hacer clic fuera del componente
   useEffect(() => {
@@ -85,11 +87,10 @@ export default function SearchBar() {
                 <li key={product.uuid}>
                   <button
                     type="button"
-                    onClick={() => {
-                      setIsOpen(false);
-                      setSearchTerm("");
-                      navigate(`/admin/products/${product.uuid}`);
-                    }}
+                    onClick={() =>
+                      navigateWithSearchParam("productPreview", product.uuid)
+                    }
+                    title="Preview"
                     className="w-full text-left px-4 py-3 hover:bg-rose-50/40 transition-colors flex items-center justify-between group cursor-pointer"
                   >
                     <div className="flex items-center gap-3.5">

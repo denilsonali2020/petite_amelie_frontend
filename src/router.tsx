@@ -93,7 +93,10 @@ export default function Router() {
             path="/store/products/:productId"
             element={<StoreProductView />}
           />
-          <Route path="/:categoryId/products" element={<StoreCategoryProducts />} />
+          <Route
+            path="/:categoryId/products"
+            element={<StoreCategoryProducts />}
+          />
         </Route>
 
         {/* ==========================================================
@@ -165,7 +168,7 @@ export default function Router() {
                 element={<SubCategoryEditView />}
               />
               <Route
-                path="/admin/category/:rootCategoryId/category/:subCategoryId/sub-category/:productId/edit"
+                path="/admin/product/:productId/edit"
                 element={<ProductEditLayout />}
               >
                 <Route index element={<EditProductDataView />} />

@@ -7,12 +7,16 @@ import {
   ExclamationTriangleIcon,
   GiftIcon,
   InformationCircleIcon,
+  PencilSquareIcon,
   TagIcon,
   XCircleIcon,
 } from "@heroicons/react/20/solid";
 
 import type { getProductType } from "../types";
 import { formatCurrency } from "@/shared/utils";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import RoleWrapper from "@/components/guards/RoleWrapper";
+import { ROLES } from "../../user/types";
 
 type PreviewProductModalViewProps = {
   data: getProductType;
@@ -21,6 +25,10 @@ type PreviewProductModalViewProps = {
 export default function PreviewProductModalView({
   data,
 }: PreviewProductModalViewProps) {
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const productPreview = searchParams.get("productPreview");
+
   const primaryImage =
     data.images.find((image) => image.isPrimary) || data.images[0];
 
@@ -86,21 +94,33 @@ export default function PreviewProductModalView({
           </div>
         </div>
 
-        {data.isActive ? (
-          <div className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1.5">
-            <CheckCircleIcon className="h-4 w-4 text-emerald-500" />
-            <span className="text-[9px] font-black uppercase tracking-wide text-emerald-700">
-              Activo
-            </span>
-          </div>
-        ) : (
-          <div className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-slate-200 bg-white px-2.5 py-1.5">
-            <XCircleIcon className="h-4 w-4 text-slate-400" />
-            <span className="text-[9px] font-black uppercase tracking-wide text-slate-500">
-              Inactivo
-            </span>
-          </div>
-        )}
+        <div className="flex shrink-0 items-center gap-2">
+          {data.isActive ? (
+            <div className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1.5">
+              <CheckCircleIcon className="h-4 w-4 text-emerald-500" />
+              <span className="text-[9px] font-black uppercase tracking-wide text-emerald-700">
+                Activo
+              </span>
+            </div>
+          ) : (
+            <div className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-slate-200 bg-white px-2.5 py-1.5">
+              <XCircleIcon className="h-4 w-4 text-slate-400" />
+              <span className="text-[9px] font-black uppercase tracking-wide text-slate-500">
+                Inactivo
+              </span>
+            </div>
+          )}
+          <RoleWrapper allowedRoles={[ROLES.OWNER, ROLES.ADMIN]}>
+            <button
+              type="button"
+              onClick={() => navigate(`/admin/product/${productPreview}/edit`)}
+              className="inline-flex cursor-pointer items-center gap-1.5 rounded-full bg-pink-600 px-3 py-1.5 text-[9px] font-black uppercase tracking-wide text-white shadow-sm transition-colors hover:bg-pink-700"
+            >
+              <PencilSquareIcon className="h-4 w-4" />
+              Editar
+            </button>
+          </RoleWrapper>
+        </div>
       </div>
 
       {/* CONTENIDO PRINCIPAL */}
