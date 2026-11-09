@@ -81,79 +81,85 @@ export default function SearchBar() {
       {/* resultados */}
       {isOpen && searchTerm.trim().length > 1 && (
         <div className="absolute z-30 mt-2 w-full overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-xl ring-1 ring-black/5 animate-in fade-in-50 slide-in-from-top-2 duration-150">
-          <ul className="max-h-64 overflow-y-auto divide-y divide-gray-50">
-            {data &&
-              data.map((product) => (
-                <li key={product.uuid}>
-                  <button
-                    type="button"
-                    onClick={() =>
-                      navigateWithSearchParam("productPreview", product.uuid)
-                    }
-                    title="Preview"
-                    className="w-full text-left px-4 py-3 hover:bg-rose-50/40 transition-colors flex items-center justify-between group cursor-pointer"
-                  >
-                    <div className="flex items-center gap-3.5">
-                      {/* imagen */}
-                      <div
-                        className={`relative h-10 w-10 shrink-0 overflow-hidden rounded-xl border transition-colors ${
-                          product.isActive
-                            ? "border-gray-200/60 group-hover:border-rose-200"
-                            : "border-gray-200 bg-gray-50"
-                        }`}
-                      >
-                        {product.images ? (
-                          <img
-                            src={product.images}
-                            alt={product.name}
-                            className={`h-full w-full object-cover object-center group-hover:scale-110 transition-transform duration-300 ${
-                              !product.isActive ? "grayscale opacity-60" : ""
-                            }`}
-                          />
-                        ) : (
-                          <div className="flex h-full w-full items-center justify-center bg-rose-50 text-rose-400">
-                            <ShoppingBagIcon className="h-5 w-5" />
-                          </div>
-                        )}
-                      </div>
-
-                      {/* nombre */}
-                      <div className="flex flex-col">
-                        <p
-                          className={`text-sm font-semibold transition-colors line-clamp-1 ${
+          {data && data.length === 0 ? (
+            <p className="px-4 py-6 text-center text-sm text-gray-500">
+              No se encontraron resultados
+            </p>
+          ) : (
+            <ul className="max-h-64 overflow-y-auto divide-y divide-gray-50">
+              {data &&
+                data.map((product) => (
+                  <li key={product.uuid}>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        navigateWithSearchParam("productPreview", product.uuid)
+                      }
+                      title="Preview"
+                      className="w-full text-left px-4 py-3 hover:bg-rose-50/40 transition-colors flex items-center justify-between group cursor-pointer"
+                    >
+                      <div className="flex items-center gap-3.5">
+                        {/* imagen */}
+                        <div
+                          className={`relative h-10 w-10 shrink-0 overflow-hidden rounded-xl border transition-colors ${
                             product.isActive
-                              ? "text-gray-800 group-hover:text-rose-600"
-                              : "text-gray-500"
+                              ? "border-gray-200/60 group-hover:border-rose-200"
+                              : "border-gray-200 bg-gray-50"
                           }`}
                         >
-                          {product.name}
-                        </p>
-
-                        <div className="flex items-center gap-2 mt-0.5">
-                          {/* sku */}
-                          {product.sku && (
-                            <span className="text-[11px] font-mono text-gray-400">
-                              SKU: {product.sku}
-                            </span>
+                          {product.images ? (
+                            <img
+                              src={product.images}
+                              alt={product.name}
+                              className={`h-full w-full object-cover object-center group-hover:scale-110 transition-transform duration-300 ${
+                                !product.isActive ? "grayscale opacity-60" : ""
+                              }`}
+                            />
+                          ) : (
+                            <div className="flex h-full w-full items-center justify-center bg-rose-50 text-rose-400">
+                              <ShoppingBagIcon className="h-5 w-5" />
+                            </div>
                           )}
-                          <span
-                            className={`inline-flex items-center rounded-md px-1.5 py-0.5 text-[10px] font-semibold ring-1 ring-inset ${
+                        </div>
+
+                        {/* nombre */}
+                        <div className="flex flex-col">
+                          <p
+                            className={`text-sm font-semibold transition-colors line-clamp-1 ${
                               product.isActive
-                                ? "bg-emerald-50 text-emerald-700 ring-emerald-600/20"
-                                : "bg-amber-50 text-amber-700 ring-amber-600/20"
+                                ? "text-gray-800 group-hover:text-rose-600"
+                                : "text-gray-500"
                             }`}
                           >
-                            {product.isActive ? "Activo" : "Inactivo"}
-                          </span>
+                            {product.name}
+                          </p>
+
+                          <div className="flex items-center gap-2 mt-0.5">
+                            {/* sku */}
+                            {product.sku && (
+                              <span className="text-[11px] font-mono text-gray-400">
+                                SKU: {product.sku}
+                              </span>
+                            )}
+                            <span
+                              className={`inline-flex items-center rounded-md px-1.5 py-0.5 text-[10px] font-semibold ring-1 ring-inset ${
+                                product.isActive
+                                  ? "bg-emerald-50 text-emerald-700 ring-emerald-600/20"
+                                  : "bg-amber-50 text-amber-700 ring-amber-600/20"
+                              }`}
+                            >
+                              {product.isActive ? "Activo" : "Inactivo"}
+                            </span>
+                          </div>
                         </div>
                       </div>
-                    </div>
 
-                    <ChevronRightIcon className="h-5 w-5 text-gray-300 group-hover:text-rose-500 group-hover:translate-x-0.5 transition-all shrink-0 ml-2" />
-                  </button>
-                </li>
-              ))}
-          </ul>
+                      <ChevronRightIcon className="h-5 w-5 text-gray-300 group-hover:text-rose-500 group-hover:translate-x-0.5 transition-all shrink-0 ml-2" />
+                    </button>
+                  </li>
+                ))}
+            </ul>
+          )}
         </div>
       )}
     </div>
