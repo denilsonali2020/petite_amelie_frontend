@@ -39,10 +39,12 @@ export async function getRecentOrders() {
   }
 }
 
-export async function getTopSellingSubcategories() {
+export async function getTopSellingSubcategories(m: string) {
   try {
     const url = "/dashboard/top-categories";
-    const { data } = await api.get(url);
+    const { data } = await api.get(url, {
+      params: { m },
+    });
     const response = getTopSellingSubcategoriesSchema.safeParse(data);
     if (!response.success) {
       throw new Error("Error al cargar los datos");
@@ -55,10 +57,12 @@ export async function getTopSellingSubcategories() {
   }
 }
 
-export async function getTopSellingProducts() {
+export async function getTopSellingProducts(m: string) {
   try {
     const url = "/dashboard/top-products";
-    const { data } = await api.get(url);
+    const { data } = await api.get(url, {
+      params: { m },
+    });
     const response = getTopSellingProductsSchema.safeParse(data);
     if (!response.success) {
       throw new Error("Error al cargar los datos");

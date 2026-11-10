@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { getRecentOrders } from "../services/dashBoardService";
 import { getStatusConfig } from "../../orders/utils";
 import { formatCurrency } from "@/shared/utils";
@@ -21,6 +21,8 @@ export default function RecentOrdersTable() {
     queryKey: ["recentOrders"],
     queryFn: getRecentOrders,
   });
+
+  const navigate = useNavigate();
 
   if (isLoading) return <LoadingAdminSite />;
 
@@ -52,7 +54,10 @@ export default function RecentOrdersTable() {
         <h2 className="text-sm font-semibold text-slate-800">
           Últimos Pedidos
         </h2>
-        <button className="text-xs text-blue-600 font-medium hover:underline">
+        <button
+          className="text-xs text-blue-600 font-medium hover:underline cursor-pointer"
+          onClick={() => navigate("/admin/orders")}
+        >
           Ver todos
         </button>
       </div>
