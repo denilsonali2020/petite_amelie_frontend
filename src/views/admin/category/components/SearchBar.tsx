@@ -9,11 +9,15 @@ import { Navigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { searchProduct } from "../../product/services/productService";
 import { useNavigateWithSearchParam } from "../../../../hooks/useNavigate";
+import { useDebounce } from "../../../../hooks/useDebounce";
 
 export default function SearchBar() {
   const [searchTerm, setSearchTerm] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
+
+  // Limitar la ejecucion de una funcion
+  const debounceSearchTerm = useDebounce(searchTerm, 300);
 
   const navigateWithSearchParam = useNavigateWithSearchParam();
 
@@ -32,10 +36,10 @@ export default function SearchBar() {
   }, []);
 
   const { data, isError } = useQuery({
-    queryKey: ["searchProducts", searchTerm],
-    queryFn: () => searchProduct(searchTerm),
+    queryKey: ["searchProducts", debounceSearchTerm],
+    queryFn: () => searchProduct(debounceSearchTerm),
     retry: false,
-    enabled: searchTerm.trim().length > 1,
+    enabled: debounceSearchTerm.trim().length > 1,
   });
 
   if (isError) return <Navigate to="/404" />;
