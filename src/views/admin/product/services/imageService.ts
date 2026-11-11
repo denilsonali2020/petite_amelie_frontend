@@ -1,6 +1,6 @@
 import api from "@/lib/axios";
-import { isAxiosError } from "axios";
 import type { globalProductType } from "../types";
+import { toApiError } from "@/shared/errors";
 
 type updateProductImageProps = {
   productId: globalProductType["uuid"];
@@ -17,9 +17,7 @@ export async function updateProductImage({
     const { data } = await api.put<string>(url, formData);
     return data;
   } catch (error) {
-    if (isAxiosError(error) && error.response) {
-      throw new Error(error.response.data.error || "Hubo un error");
-    }
+    throw toApiError(error);
   }
 }
 
@@ -36,9 +34,7 @@ export async function createProductImage({
     const { data } = await api.post<string>(url, formData);
     return data;
   } catch (error) {
-    if (isAxiosError(error) && error.response) {
-      throw new Error(error.response.data.error || "Hubo un error");
-    }
+    throw toApiError(error);
   }
 }
 
@@ -48,8 +44,6 @@ export async function deleteProductImage(imageId: string) {
     const { data } = await api.delete<string>(url);
     return data;
   } catch (error) {
-    if (isAxiosError(error) && error.response) {
-      throw new Error(error.response.data.error || "Hubo un error");
-    }
+    throw toApiError(error);
   }
 }

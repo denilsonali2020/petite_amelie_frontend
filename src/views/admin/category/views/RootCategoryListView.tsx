@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { Navigate, useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { getRootCategories } from "../services/rootCategoryService";
 import {
   PlusIcon,
@@ -17,6 +17,7 @@ import RoleWrapper from "@/components/guards/RoleWrapper";
 import LoadingAdminSite from "@/components/reusable/LoadingAdminSite";
 import SearchBar from "../components/SearchBar";
 import PreviewProductModal from "../../product/components/PreviewProductModal";
+import { useQueryErrorHandler } from "@/hooks/useQueryErrorHandler";
 
 // Importamos el Wrapper de Roles
 
@@ -30,15 +31,15 @@ export default function RootCategoryListView() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { data, isLoading, isError } = useQuery({
+  const { data, isLoading, error } = useQuery({
     queryKey: ["rootCategories"],
     queryFn: () => getRootCategories(),
     retry: false,
   });
 
-  if (isLoading) return <LoadingAdminSite />;
+  useQueryErrorHandler(error);
 
-  if (isError) return <Navigate to={"/404"} />;
+  if (isLoading) return <LoadingAdminSite />;
 
   return (
     <>

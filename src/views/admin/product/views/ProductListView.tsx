@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useParams, useNavigate, Navigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import {
   PlusIcon,
@@ -22,6 +22,7 @@ import { usePagination } from "../../../../hooks/usePagination.ts";
 import Pagination from "@/components/reusable/Pagination.tsx";
 import LoadingAdminSite from "@/components/reusable/LoadingAdminSite.tsx";
 import { useNavigateWithSearchParam } from "../../../../hooks/useNavigate.ts";
+import { useQueryErrorHandler } from "@/hooks/useQueryErrorHandler.ts";
 
 export default function ProductListView() {
   const navigate = useNavigate();
@@ -34,7 +35,7 @@ export default function ProductListView() {
   // PAGINACIÓN
   const { page, limit, setPage, setLimit } = usePagination();
 
-  const { data, isLoading, isError } = useQuery({
+  const { data, isLoading, error } = useQuery({
     queryKey: ["products", subCategoryId, page, limit],
     queryFn: () => getProductsByCategory(subCategoryId, page, limit),
     retry: false,
@@ -48,9 +49,9 @@ export default function ProductListView() {
     }
   }, [data, page, setPage]);
 
-  if (isLoading) return <LoadingAdminSite />;
+  useQueryErrorHandler(error);
 
-  if (isError) return <Navigate to="/404" />;
+  if (isLoading) return <LoadingAdminSite />;
 
   if (data)
     return (

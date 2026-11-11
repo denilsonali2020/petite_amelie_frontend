@@ -1,9 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { getRecentOrders } from "../services/dashBoardService";
 import { getStatusConfig } from "../../orders/utils";
 import { formatCurrency } from "@/shared/utils";
 import LoadingAdminSite from "@/components/reusable/LoadingAdminSite";
+import { useQueryErrorHandler } from "@/hooks/useQueryErrorHandler";
 
 // Tipos
 type OrderStatus =
@@ -17,16 +18,16 @@ type OrderStatus =
   | "REFUNDED";
 
 export default function RecentOrdersTable() {
-  const { data, isLoading, isError } = useQuery({
+  const { data, isLoading, error } = useQuery({
     queryKey: ["recentOrders"],
     queryFn: getRecentOrders,
   });
 
   const navigate = useNavigate();
 
-  if (isLoading) return <LoadingAdminSite />;
+  useQueryErrorHandler(error);
 
-  if (isError) return <Navigate to={"/404"} />;
+  if (isLoading) return <LoadingAdminSite />;
 
   // Ya no necesitamos duplicar datos. Usamos los datos reales o un arreglo vacío.
   const orders = data || [];

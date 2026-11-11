@@ -1,10 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import {
-  Navigate,
-  useParams,
-  useNavigate,
-  useLocation,
-} from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { getOrder } from "../services/orderService";
 import {
   ArrowLeftIcon,
@@ -22,6 +17,7 @@ import { formatCurrency } from "@/shared/utils";
 import ShippingLogisticsForm from "../components/PreviewOrder/ShippingLogisticsForm";
 import StatusForm from "../components/PreviewOrder/StatusForm";
 import LoadingAdminSite from "@/components/reusable/LoadingAdminSite";
+import { useQueryErrorHandler } from "@/hooks/useQueryErrorHandler";
 
 export default function DetailOrderView() {
   const navigate = useNavigate();
@@ -29,16 +25,17 @@ export default function DetailOrderView() {
   const location = useLocation();
   const orderId = param.orderId!;
 
-  const { data, isLoading, isError } = useQuery({
+  const { data, isLoading, error } = useQuery({
     queryKey: ["order", orderId],
     queryFn: () => getOrder(orderId),
     retry: false,
   });
 
+  useQueryErrorHandler(error);
+
   if (isLoading) return <LoadingAdminSite />;
 
-  if (isError || !data) return <Navigate to={"/404"} />;
-
+  if (!data) return;
   // Obtenemos la configuración de colores para el estado actual
   const statusConfig = getStatusConfig(data.status);
 

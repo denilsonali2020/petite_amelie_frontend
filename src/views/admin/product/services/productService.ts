@@ -1,6 +1,5 @@
 import api from "@/lib/axios";
 
-import { isAxiosError } from "axios";
 import {
   getProductOrderSchema,
   getProductsByCategorySchema,
@@ -11,6 +10,7 @@ import {
   type globalProductType,
 } from "../types";
 import type { generalCategoryType } from "../../category/types";
+import { toApiError } from "@/shared/errors";
 
 export async function getProductsByCategory(
   categoryId: generalCategoryType["uuid"],
@@ -22,14 +22,9 @@ export async function getProductsByCategory(
     const { data } = await api.get(url, {
       params: { page, limit },
     });
-    const response = getProductsByCategorySchema.safeParse(data);
-    if (response.success) {
-      return response.data;
-    }
+    return getProductsByCategorySchema.parse(data);
   } catch (error) {
-    if (isAxiosError(error) && error.response) {
-      throw new Error(error.response.data.error || "Hubo un error");
-    }
+    throw toApiError(error);
   }
 }
 
@@ -47,9 +42,7 @@ export async function createProduct({
     const { data } = await api.post<string>(url, formData);
     return data;
   } catch (error) {
-    if (isAxiosError(error) && error.response) {
-      throw new Error(error.response.data.error || "Hubo un error");
-    }
+    throw toApiError(error);
   }
 }
 
@@ -57,14 +50,9 @@ export async function getProduct(productId: globalProductType["uuid"]) {
   try {
     const url = `/products/${productId}`;
     const { data } = await api.get(url);
-    const response = getProductSchema.safeParse(data);
-    if (response.success) {
-      return response.data;
-    }
+    return getProductSchema.parse(data);
   } catch (error) {
-    if (isAxiosError(error) && error.response) {
-      throw new Error(error.response.data.error || "Hubo un error");
-    }
+    throw toApiError(error);
   }
 }
 
@@ -81,9 +69,7 @@ export async function updateProduct({
     const { data } = await api.put<string>(url, formData);
     return data;
   } catch (error) {
-    if (isAxiosError(error) && error.response) {
-      throw new Error(error.response.data.error || "Hubo un error");
-    }
+    throw toApiError(error);
   }
 }
 
@@ -91,14 +77,9 @@ export async function getProductOrder({ sku }: getProductOrderType) {
   try {
     const url = `/products/${sku}/order`;
     const { data } = await api.post(url);
-    const response = getProductOrderSchema.safeParse(data);
-    if (response.success) {
-      return response.data;
-    }
+    return getProductOrderSchema.parse(data);
   } catch (error) {
-    if (isAxiosError(error) && error.response) {
-      throw new Error(error.response.data.error || "Hubo un error");
-    }
+    throw toApiError(error);
   }
 }
 
@@ -108,13 +89,8 @@ export async function searchProduct(p: string) {
     const { data } = await api.get(url, {
       params: { p },
     });
-    const response = searchProductSchema.safeParse(data);
-    if (response.success) {
-      return response.data;
-    }
+    return searchProductSchema.parse(data);
   } catch (error) {
-    if (isAxiosError(error) && error.response) {
-      throw new Error(error.response.data.error || "Hubo un error");
-    }
+    throw toApiError(error);
   }
 }

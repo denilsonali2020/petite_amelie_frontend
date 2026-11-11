@@ -1,5 +1,4 @@
 import api from "@/lib/axios";
-import { isAxiosError } from "axios";
 import {
   getCustomerBilingInfoSchema,
   getOrderSchema,
@@ -10,6 +9,7 @@ import {
   type CustomerIdentifier,
   type globalOrderType,
 } from "../types";
+import { toApiError } from "@/shared/errors";
 
 export async function createOrder(formData: createOrderType) {
   try {
@@ -17,9 +17,7 @@ export async function createOrder(formData: createOrderType) {
     const { data } = await api.post(url, formData);
     return data;
   } catch (error) {
-    if (isAxiosError(error) && error.response) {
-      throw new Error(error.response.data.error || "Hubo un error");
-    }
+    throw toApiError(error);
   }
 }
 
@@ -34,15 +32,9 @@ export async function getOrders(page: number = 1, limit: number = 10) {
       },
     });
 
-    const response = getOrdersSchema.safeParse(data);
-    if (!response.success) {
-      throw new Error("Error al cargar los datos");
-    }
-    return response.data;
+    return getOrdersSchema.parse(data);
   } catch (error) {
-    if (isAxiosError(error) && error.response) {
-      throw new Error(error.response.data.error || "Hubo un error");
-    }
+    throw toApiError(error);
   }
 }
 
@@ -52,15 +44,9 @@ export async function getCustomerBilingInfo(
   try {
     const url = `/customer/${identifier}`;
     const { data } = await api.post(url);
-    const response = getCustomerBilingInfoSchema.safeParse(data);
-    if (!response.success) {
-      throw new Error("Error al cargar los datos");
-    }
-    return response.data;
+    return getCustomerBilingInfoSchema.parse(data);
   } catch (error) {
-    if (isAxiosError(error) && error.response) {
-      throw new Error(error.response.data.error || "Hubo un error");
-    }
+    throw toApiError(error);
   }
 }
 
@@ -68,15 +54,9 @@ export async function getOrder(uuid: globalOrderType["uuid"]) {
   try {
     const url = `/orders/${uuid}`;
     const { data } = await api.get(url);
-    const response = getOrderSchema.safeParse(data);
-    if (!response.success) {
-      throw new Error("Error al cargar los datos");
-    }
-    return response.data;
+    return getOrderSchema.parse(data);
   } catch (error) {
-    if (isAxiosError(error) && error.response) {
-      throw new Error(error.response.data.error || "Hubo un error");
-    }
+    throw toApiError(error);
   }
 }
 
@@ -93,9 +73,7 @@ export async function addShippingInfo({
     const { data } = await api.post<string>(url, formData);
     return data;
   } catch (error) {
-    if (isAxiosError(error) && error.response) {
-      throw new Error(error.response.data.error || "Hubo un error");
-    }
+    throw toApiError(error);
   }
 }
 
@@ -109,8 +87,6 @@ export async function changeStatus({ uuid, formData }: changeStatusProps) {
     const { data } = await api.patch<string>(url, formData);
     return data;
   } catch (error) {
-    if (isAxiosError(error) && error.response) {
-      throw new Error(error.response.data.error || "Hubo un error");
-    }
+    throw toApiError(error);
   }
 }

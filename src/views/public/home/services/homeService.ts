@@ -1,6 +1,5 @@
 import api from "@/lib/axios";
 
-import { isAxiosError } from "axios";
 import {
   getBestSellersPerTopCategoriesSchema,
   getOffersPerTopCategoriesSchema,
@@ -8,21 +7,15 @@ import {
   navigationSchema,
   newArrivalsSchema,
 } from "../types";
+import { toApiError } from "@/shared/errors";
 
 export async function navigation() {
   try {
     const url = "/home/navigation";
     const { data } = await api.get(url);
-    const response = navigationSchema.safeParse(data);
-    if (!response.success) {
-      throw new Error("Error al cargar los datos");
-    }
-    return response.data;
+    return navigationSchema.parse(data);
   } catch (error) {
-    if (isAxiosError(error) && error.response) {
-      throw new Error(error.response.data.error || "Hubo un error");
-    }
-    throw new Error("Hubo un error inesperado");
+    throw toApiError(error);
   }
 }
 
@@ -30,16 +23,9 @@ export async function latestProducts() {
   try {
     const url = "/home/latest-products";
     const { data } = await api.get(url);
-    const response = newArrivalsSchema.safeParse(data);
-    if (!response.success) {
-      throw new Error("Error al cargar los datos");
-    }
-    return response.data;
+    return newArrivalsSchema.parse(data);
   } catch (error) {
-    if (isAxiosError(error) && error.response) {
-      throw new Error(error.response.data.error || "Hubo un error");
-    }
-    throw new Error("Hubo un error inesperado");
+    throw toApiError(error);
   }
 }
 
@@ -47,16 +33,9 @@ export async function latestSubCategories() {
   try {
     const url = "/home/sub-categories/latest";
     const { data } = await api.get(url);
-    const response = latestSubCategoriesSchema.safeParse(data);
-    if (!response.success) {
-      throw new Error("Error al cargar los datos");
-    }
-    return response.data;
+    return latestSubCategoriesSchema.parse(data);
   } catch (error) {
-    if (isAxiosError(error) && error.response) {
-      throw new Error(error.response.data.error || "Hubo un error");
-    }
-    throw new Error("Hubo un error inesperado");
+    throw toApiError(error);
   }
 }
 
@@ -64,31 +43,17 @@ export async function getBestSellersPerTopCategories() {
   try {
     const url = "/home/best-sellers/latest";
     const { data } = await api.get(url);
-    const response = getBestSellersPerTopCategoriesSchema.safeParse(data);
-    if (!response.success) {
-      throw new Error("Error al cargar los datos");
-    }
-    return response.data;
+    return getBestSellersPerTopCategoriesSchema.parse(data);
   } catch (error) {
-    if (isAxiosError(error) && error.response) {
-      throw new Error(error.response.data.error || "Hubo un error");
-    }
-    throw new Error("Hubo un error inesperado");
+    throw toApiError(error);
   }
 }
 export async function getOffersPerTopCategories() {
   try {
     const url = "/home/offers/latest";
     const { data } = await api.get(url);
-    const response = getOffersPerTopCategoriesSchema.safeParse(data);
-    if (!response.success) {
-      throw new Error("Error al cargar los datos");
-    }
-    return response.data;
+    return getOffersPerTopCategoriesSchema.parse(data);
   } catch (error) {
-    if (isAxiosError(error) && error.response) {
-      throw new Error(error.response.data.error || "Hubo un error");
-    }
-    throw new Error("Hubo un error inesperado");
+    throw toApiError(error);
   }
 }

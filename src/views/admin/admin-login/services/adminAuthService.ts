@@ -1,5 +1,5 @@
 import api from "@/lib/axios";
-import axios, { isAxiosError } from "axios";
+import axios from "axios";
 import {
   globalAdminAuthSchema,
   refreshTokenSchema,
@@ -7,19 +7,15 @@ import {
   type mustChangePasswordForm,
 } from "../types";
 import type { globalUserType } from "../../user/types";
+import { toApiError } from "@/shared/errors";
 
 export async function login(formData: adminLoginForm) {
   try {
     const url = "/admin-auth/login";
     const { data } = await api.post(url, formData);
-    const response = globalAdminAuthSchema.safeParse(data);
-    if (response.success) {
-      return response.data;
-    }
+    return globalAdminAuthSchema.parse(data);
   } catch (error) {
-    if (isAxiosError(error) && error.response) {
-      throw new Error(error.response.data.error || "Hubo un error");
-    }
+    throw toApiError(error);
   }
 }
 
@@ -31,15 +27,9 @@ export async function refresh() {
         withCredentials: true,
       },
     );
-    const response = refreshTokenSchema.safeParse(data);
-    if (!response.success) {
-      throw new Error("Refresh token inválido");
-    }
-    return response.data;
+    return refreshTokenSchema.parse(data);
   } catch (error) {
-    if (isAxiosError(error) && error.response) {
-      throw new Error(error.response.data.error || "Hubo un error");
-    }
+    throw toApiError(error);
   }
 }
 
@@ -49,9 +39,7 @@ export async function logout() {
     const { data } = await api.post<string>(url);
     return data;
   } catch (error) {
-    if (isAxiosError(error) && error.response) {
-      throw new Error(error.response.data.error || "Hubo un error");
-    }
+    throw toApiError(error);
   }
 }
 
@@ -69,8 +57,6 @@ export async function mustChangePassword({
     const { data } = await api.put<string>(url, password);
     return data;
   } catch (error) {
-    if (isAxiosError(error) && error.response) {
-      throw new Error(error.response.data.error || "Hubo un error");
-    }
+    throw toApiError(error);
   }
 }

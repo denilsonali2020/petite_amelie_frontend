@@ -1,10 +1,10 @@
 import api from "@/lib/axios";
 
-import { isAxiosError } from "axios";
 import {
   getSubCategoriesByUuidSchema,
   type generalCategoryType,
 } from "../types";
+import { toApiError } from "@/shared/errors";
 
 export async function getSubCategoriesByUuid(
   uuid: generalCategoryType["uuid"],
@@ -12,14 +12,9 @@ export async function getSubCategoriesByUuid(
   try {
     const url = `/category/${uuid}`;
     const { data } = await api.get(url);
-    const response = getSubCategoriesByUuidSchema.safeParse(data);
-    if (response.success) {
-      return response.data;
-    }
+    return getSubCategoriesByUuidSchema.parse(data);
   } catch (error) {
-    if (isAxiosError(error) && error.response) {
-      throw new Error(error.response.data.error || "Hubo un error");
-    }
+    throw toApiError(error);
   }
 }
 
@@ -29,9 +24,7 @@ export async function createSubCategory(formData: FormData) {
     const { data } = await api.post<string>(url, formData);
     return data;
   } catch (error) {
-    if (isAxiosError(error) && error.response) {
-      throw new Error(error.response.data.error || "Hubo un error");
-    }
+    throw toApiError(error);
   }
 }
 
@@ -48,9 +41,7 @@ export async function updateSubCategory({
     const { data } = await api.put<string>(url, formData);
     return data;
   } catch (error) {
-    if (isAxiosError(error) && error.response) {
-      throw new Error(error.response.data.error || "Hubo un error");
-    }
+    throw toApiError(error);
   }
 }
 
@@ -62,8 +53,6 @@ export async function deleteSubCategory(
     const { data } = await api.delete<string>(url);
     return data;
   } catch (error) {
-    if (isAxiosError(error) && error.response) {
-      throw new Error(error.response.data.error || "Hubo un error");
-    }
+    throw toApiError(error);
   }
 }

@@ -1,4 +1,4 @@
-import { Link, Navigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { usePagination } from "../../../../hooks/usePagination";
 import { useQuery } from "@tanstack/react-query";
 import { productsByCategory } from "../services/storeCategoryService";
@@ -15,6 +15,7 @@ import {
 } from "@heroicons/react/20/solid";
 import Pagination from "@/components/reusable/Pagination";
 import { formatCurrency } from "@/shared/utils";
+import { useQueryErrorHandler } from "@/hooks/useQueryErrorHandler";
 
 const categories = [
   {
@@ -59,7 +60,7 @@ export default function StoreCategoryProducts() {
 
   const { page, limit, setPage, setLimit } = usePagination();
 
-  const { data, isLoading, isError } = useQuery({
+  const { data, isLoading, error } = useQuery({
     queryKey: ["categoryProducts", categoryId, page, limit],
     queryFn: () => productsByCategory(categoryId, page, limit),
     retry: false,
@@ -71,12 +72,10 @@ export default function StoreCategoryProducts() {
     }
   }, [data, page, setPage]);
 
+  useQueryErrorHandler(error);
+
   if (isLoading) {
     return <LoadingWebSite />;
-  }
-
-  if (isError) {
-    return <Navigate to="/404" />;
   }
 
   if (!data) {

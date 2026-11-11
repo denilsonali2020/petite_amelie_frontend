@@ -1,10 +1,4 @@
-import {
-  Link,
-  Navigate,
-  useNavigate,
-  useParams,
-  useLocation,
-} from "react-router-dom";
+import { Link, useNavigate, useParams, useLocation } from "react-router-dom";
 import {
   PlusIcon,
   PencilIcon,
@@ -20,6 +14,7 @@ import DeleteSubCategoryModal from "../components/subCategory/DeleteSubCategoryM
 import CreateSubCategoryModal from "../components/subCategory/CreateSubCategoryModal";
 import RoleWrapper from "@/components/guards/RoleWrapper";
 import LoadingAdminSite from "@/components/reusable/LoadingAdminSite";
+import { useQueryErrorHandler } from "@/hooks/useQueryErrorHandler";
 
 // Constantes de Roles
 const ROLES = {
@@ -34,15 +29,15 @@ export default function SubCategoryListview() {
   const params = useParams();
   const rootCategoryId = params.rootCategoryId!;
 
-  const { data, isError, isLoading } = useQuery({
+  const { data, error, isLoading } = useQuery({
     queryKey: ["subCategories", rootCategoryId],
     queryFn: () => getSubCategoriesByUuid(rootCategoryId),
     retry: false,
   });
 
-  if (isLoading) return <LoadingAdminSite />;
+  useQueryErrorHandler(error);
 
-  if (isError) return <Navigate to={"/404"} />;
+  if (isLoading) return <LoadingAdminSite />;
 
   if (data)
     return (

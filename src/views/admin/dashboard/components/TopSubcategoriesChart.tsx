@@ -4,6 +4,7 @@ import { PieChart, Pie, ResponsiveContainer, Tooltip } from "recharts";
 import { getTopSellingSubcategories } from "../services/dashBoardService";
 import LoadingAdminSite from "@/components/reusable/LoadingAdminSite";
 import { MONTHS } from "@/locales/es";
+import { useQueryErrorHandler } from "@/hooks/useQueryErrorHandler";
 
 const PIE_COLORS = [
   "#0247DB",
@@ -14,16 +15,16 @@ const PIE_COLORS = [
   "#ec4899",
 ];
 
-
-
 export default function TopSubcategoriesChart() {
   // Mes actual por defecto (getMonth() va de 0 a 11, por eso el +1)
   const [month, setMonth] = useState(String(new Date().getMonth() + 1));
 
-  const { data, isLoading, isError, error } = useQuery({
+  const { data, isLoading, error } = useQuery({
     queryKey: ["topSubcategories", month], // <- el mes cambia la key
     queryFn: () => getTopSellingSubcategories(month), // <- pasamos el mes
   });
+
+  useQueryErrorHandler(error);
 
   const monthLabel = MONTHS.find((m) => m.value === month)?.label;
 
@@ -59,10 +60,6 @@ export default function TopSubcategoriesChart() {
 
       {isLoading ? (
         <LoadingAdminSite />
-      ) : isError ? (
-        <p className="text-xs text-red-500 text-center py-8">
-          {error instanceof Error ? error.message : "Error al cargar los datos"}
-        </p>
       ) : chartData.length === 0 ? (
         <p className="text-xs text-slate-400 text-center py-8">
           No hay ventas registradas en {monthLabel}.

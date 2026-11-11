@@ -9,19 +9,19 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { getCurrentYearMonthlySales } from "../services/dashBoardService";
-import { Navigate } from "react-router-dom";
 import { formatCurrency } from "@/shared/utils";
 import LoadingAdminSite from "@/components/reusable/LoadingAdminSite";
+import { useQueryErrorHandler } from "@/hooks/useQueryErrorHandler";
 
 export default function MonthlySalesChart() {
-  const { data, isLoading, isError } = useQuery({
+  const { data, isLoading, error } = useQuery({
     queryKey: ["monthlySalesCurrentYear"],
     queryFn: getCurrentYearMonthlySales,
   });
 
-  if (isLoading) return <LoadingAdminSite />;
+  useQueryErrorHandler(error);
 
-  if (isError) return <Navigate to={"/404"} />;
+  if (isLoading) return <LoadingAdminSite />;
 
   const chartData = data
     ? [

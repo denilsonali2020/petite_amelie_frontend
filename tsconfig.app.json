@@ -16,7 +16,8 @@
       "@/lib/*": ["./src/lib/*"],
       "@/store/*": ["./src/store/*"],
       "@/locales/*": ["./src/locales/*"],
-      "@/shared/*": ["./src/shared/*"]
+      "@/shared/*": ["./src/shared/*"],
+      "@/hooks/*": ["./src/hooks/*"]
     },
 
     /* Bundler mode */

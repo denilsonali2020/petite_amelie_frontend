@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Navigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { findProduct } from "../services/storeProductService";
 import LoadingWebSite from "@/components/reusable/LoadingWebSite";
+import { useQueryErrorHandler } from "@/hooks/useQueryErrorHandler";
 
 export default function StoreProductView() {
   const params = useParams();
@@ -12,7 +13,7 @@ export default function StoreProductView() {
     window.scrollTo(0, 0);
   }, []);
 
-  const { data, isLoading, isError } = useQuery({
+  const { data, isLoading, error } = useQuery({
     queryKey: ["findStoreProduct", productId],
     queryFn: () => findProduct(productId),
     retry: false,
@@ -20,11 +21,11 @@ export default function StoreProductView() {
 
   const [selectedImage, setSelectedImage] = useState(0);
 
+  useQueryErrorHandler(error);
+
   if (isLoading) return <LoadingWebSite />;
 
-  if (isError || !data) {
-    return <Navigate to="/404" />;
-  }
+  if (!data) return;
 
   // Buscar primero la imagen principal
   const primaryImageIndex = data.images.findIndex(

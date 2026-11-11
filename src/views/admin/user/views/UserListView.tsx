@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { Navigate, useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { getAllUsers } from "../services/userService";
 import {
   PlusIcon,
@@ -12,6 +12,7 @@ import ResetPasswordModal from "../components/resetPassword/ResetPasswordModal";
 import CreateUserModal from "../components/CreateUserModal";
 import { roleTranslation } from "@/locales/es";
 import LoadingAdminSite from "@/components/reusable/LoadingAdminSite";
+import { useQueryErrorHandler } from "@/hooks/useQueryErrorHandler";
 
 // Utilidad para los colores de los roles
 const roleStyles = {
@@ -24,15 +25,15 @@ export default function UserListView() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { data, isLoading, isError } = useQuery({
+  const { data, isLoading, error } = useQuery({
     queryKey: ["users"],
     queryFn: () => getAllUsers(),
     retry: false,
   });
 
-  if (isLoading) return <LoadingAdminSite />;
+  useQueryErrorHandler(error);
 
-  if (isError) return <Navigate to={"/404"} />;
+  if (isLoading) return <LoadingAdminSite />;
 
   return (
     <>

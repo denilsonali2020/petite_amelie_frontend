@@ -1,26 +1,26 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { CubeIcon } from "@heroicons/react/24/outline";
-import { Navigate } from "react-router-dom";
 import { getTopSellingProducts } from "../services/dashBoardService";
 import { formatCurrency } from "@/shared/utils";
 import LoadingAdminSite from "@/components/reusable/LoadingAdminSite";
 import { MONTHS } from "@/locales/es";
+import { useQueryErrorHandler } from "@/hooks/useQueryErrorHandler";
 
 export default function TopProductsTable() {
   // Mes actual por defecto
   const [month, setMonth] = useState(String(new Date().getMonth() + 1));
 
-  const { data, isLoading, isError } = useQuery({
+  const { data, isLoading, error } = useQuery({
     queryKey: ["topProducts", month],
     queryFn: () => getTopSellingProducts(month),
   });
 
   const monthLabel = MONTHS.find((m) => m.value === month)?.label;
 
-  if (isLoading) return <LoadingAdminSite />;
+  useQueryErrorHandler(error);
 
-  if (isError) return <Navigate to={"/404"} />;
+  if (isLoading) return <LoadingAdminSite />;
 
   return (
     <div className="bg-white rounded-lg border border-slate-200 shadow-sm overflow-hidden">

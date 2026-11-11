@@ -1,22 +1,23 @@
 import { PencilSquareIcon } from "@heroicons/react/24/outline";
 import { useQuery } from "@tanstack/react-query";
 import { getUser } from "../services/userService";
-import { Navigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import EditUserForm from "../components/EditUserForm";
 import LoadingAdminSite from "@/components/reusable/LoadingAdminSite";
+import { useQueryErrorHandler } from "@/hooks/useQueryErrorHandler";
 
 export default function EditUserView() {
   const param = useParams();
   const userId = param.userId!;
 
-  const { data, isError, isLoading } = useQuery({
+  const { data, error, isLoading } = useQuery({
     queryKey: ["user", userId],
     queryFn: () => getUser(userId),
   });
 
-  if (isLoading) return <LoadingAdminSite />;
+  useQueryErrorHandler(error);
 
-  if (isError) return <Navigate to="/404" />;
+  if (isLoading) return <LoadingAdminSite />;
 
   if (data)
     return (

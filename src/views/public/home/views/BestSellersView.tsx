@@ -2,18 +2,18 @@ import { FireIcon, TrophyIcon, HeartIcon } from "@heroicons/react/24/outline";
 import ProductCarousel from "@/components/reusable/ProductCarousel";
 import { useQuery } from "@tanstack/react-query";
 import { getBestSellersPerTopCategories } from "../services/homeService";
-import { Navigate } from "react-router-dom";
 import LoadingWebSite from "@/components/reusable/LoadingWebSite";
+import { useQueryErrorHandler } from "@/hooks/useQueryErrorHandler";
 
 export default function BestSellersView() {
-  const { data, isLoading, isError } = useQuery({
+  const { data, isLoading, error } = useQuery({
     queryKey: ["bestSellersProdutsPerCategories"],
     queryFn: getBestSellersPerTopCategories,
   });
 
-  if (isLoading) return <LoadingWebSite />;
+  useQueryErrorHandler(error);
 
-  if (isError) return <Navigate to={"/404"} />;
+  if (isLoading) return <LoadingWebSite />;
 
   const firstCategories = data!.slice(0, 3);
   const remainingCategories = data!.slice(3);

@@ -8,15 +8,17 @@ import {
 
 // ¡Ajusta los imports según tu proyecto!
 import { formatCurrency } from "@/shared/utils";
-import ErrorMessageLoadingData from "@/components/ui/ErrorMessageProps";
 import { getMetricsInventory } from "../../services/reportService";
 import { ArchiveBoxIcon } from "@heroicons/react/20/solid";
+import { useQueryErrorHandler } from "@/hooks/useQueryErrorHandler";
 
 export default function InventoryCards() {
-  const { data, isPending, isError } = useQuery({
+  const { data, isPending, error } = useQuery({
     queryKey: ["inventory-metrics"],
     queryFn: getMetricsInventory,
   });
+
+  useQueryErrorHandler(error);
 
   if (isPending) {
     return (
@@ -25,15 +27,6 @@ export default function InventoryCards() {
           Calculando métricas...
         </p>
       </div>
-    );
-  }
-
-  if (isError) {
-    return (
-      <ErrorMessageLoadingData
-        title="Error"
-        message="No se pudo cargar la información del inventario..."
-      />
     );
   }
 

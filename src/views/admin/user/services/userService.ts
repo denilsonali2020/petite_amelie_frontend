@@ -1,5 +1,4 @@
 import api from "@/lib/axios";
-import { isAxiosError } from "axios";
 import {
   getAllUsersSchema,
   getUserSchema,
@@ -9,20 +8,15 @@ import {
   type passwordForm,
   type updateUserType,
 } from "../types";
+import { toApiError } from "@/shared/errors";
 
 export async function getAllUsers() {
   try {
     const url = `/users`;
     const { data } = await api.get(url);
-    const response = getAllUsersSchema.safeParse(data);
-    if (!response.success) {
-      throw new Error("Error al cargar los datos");
-    }
-    return response.data;
+    return getAllUsersSchema.parse(data);
   } catch (error) {
-    if (isAxiosError(error) && error.response) {
-      throw new Error(error.response.data.error || "Hubo un error");
-    }
+    throw toApiError(error);
   }
 }
 
@@ -32,9 +26,7 @@ export async function createUser(formData: createUserType) {
     const { data } = await api.post<string>(url, formData);
     return data;
   } catch (error) {
-    if (isAxiosError(error) && error.response) {
-      throw new Error(error.response.data.error || "Hubo un error");
-    }
+    throw toApiError(error);
   }
 }
 
@@ -42,15 +34,9 @@ export async function getUser(userId: globalUserType["uuid"]) {
   try {
     const url = `/users/${userId}`;
     const { data } = await api.get(url);
-    const response = getUserSchema.safeParse(data);
-    if (!response.success) {
-      throw new Error("Error al cargar los datos");
-    }
-    return response.data;
+    return getUserSchema.parse(data);
   } catch (error) {
-    if (isAxiosError(error) && error.response) {
-      throw new Error(error.response.data.error || "Hubo un error");
-    }
+    throw toApiError(error);
   }
 }
 
@@ -65,26 +51,20 @@ export async function updateUser({ userId, formData }: updateUserProps) {
     const { data } = await api.put<string>(url, formData);
     return data;
   } catch (error) {
-    if (isAxiosError(error) && error.response) {
-      throw new Error(error.response.data.error || "Hubo un error");
-    }
+    throw toApiError(error);
   }
 }
 
 type verifyPasswordProps = {
   password: passwordForm;
 };
-export async function verifyPassword({
-  password,
-}: verifyPasswordProps) {
+export async function verifyPassword({ password }: verifyPasswordProps) {
   try {
     const url = `/users/check-password`;
     const { data } = await api.post<string>(url, password);
     return data;
   } catch (error) {
-    if (isAxiosError(error) && error.response) {
-      throw new Error(error.response.data.error || "Hubo un error");
-    }
+    throw toApiError(error);
   }
 }
 
@@ -101,9 +81,7 @@ export async function recoveryPasswordUser({
     const { data } = await api.patch<string>(url, password);
     return data;
   } catch (error) {
-    if (isAxiosError(error) && error.response) {
-      throw new Error(error.response.data.error || "Hubo un error");
-    }
+    throw toApiError(error);
   }
 }
 
@@ -111,14 +89,8 @@ export async function getUsersQuickPin() {
   try {
     const url = `/users/quick-pin`;
     const { data } = await api.get(url);
-    const response = getUsersQuickPinShcema.safeParse(data);
-    if (!response.success) {
-      throw new Error("Error al cargar los datos");
-    }
-    return response.data;
+    return getUsersQuickPinShcema.parse(data);
   } catch (error) {
-    if (isAxiosError(error) && error.response) {
-      throw new Error(error.response.data.error || "Hubo un error");
-    }
+    throw toApiError(error);
   }
 }

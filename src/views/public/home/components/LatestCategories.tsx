@@ -2,23 +2,18 @@ import { useQuery } from "@tanstack/react-query";
 import { latestSubCategories } from "../services/homeService";
 import { Link } from "react-router-dom";
 import LoadingWebSite from "@/components/reusable/LoadingWebSite";
+import { useQueryErrorHandler } from "@/hooks/useQueryErrorHandler";
 
 export default function LatestCategories() {
-  const { data, isLoading, isError } = useQuery({
+  const { data, isLoading, error } = useQuery({
     queryKey: ["latestSubCategories"],
     queryFn: latestSubCategories,
     retry: false,
   });
 
-  if (isLoading) return <LoadingWebSite />;
+  useQueryErrorHandler(error);
 
-  if (isError) {
-    return (
-      <div className="py-10 text-center text-sm text-neutral-500 bg-neutral-50">
-        No se pudieron cargar las categorías en este momento.
-      </div>
-    );
-  }
+  if (isLoading) return <LoadingWebSite />;
 
   if (data)
     return (

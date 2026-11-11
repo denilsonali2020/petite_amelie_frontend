@@ -1,11 +1,11 @@
 import api from "@/lib/axios";
-import { isAxiosError } from "axios";
 import {
   updateNameSchema,
   type changePasswordForm,
   type changeQuickPinForm,
   type updateNameForm,
 } from "../types";
+import { toApiError } from "@/shared/errors";
 
 type updateNameProps = {
   formData: updateNameForm;
@@ -14,14 +14,9 @@ export async function updateName({ formData }: updateNameProps) {
   try {
     const url = `/users/name`;
     const { data } = await api.patch(url, formData);
-    const response = updateNameSchema.safeParse(data);
-    if (response.success) {
-      return response.data;
-    }
+    return updateNameSchema.parse(data);
   } catch (error) {
-    if (isAxiosError(error) && error.response) {
-      throw new Error(error.response.data.error || "Hubo un error");
-    }
+    throw toApiError(error);
   }
 }
 
@@ -34,9 +29,7 @@ export async function changePassword({ formData }: changePasswordProps) {
     const { data } = await api.patch<string>(url, formData);
     return data;
   } catch (error) {
-    if (isAxiosError(error) && error.response) {
-      throw new Error(error.response.data.error || "Hubo un error");
-    }
+    throw toApiError(error);
   }
 }
 
@@ -49,8 +42,6 @@ export async function changeQuickPin({ formData }: changeQuickPinProps) {
     const { data } = await api.patch<string>(url, formData);
     return data;
   } catch (error) {
-    if (isAxiosError(error) && error.response) {
-      throw new Error(error.response.data.error || "Hubo un error");
-    }
+    throw toApiError(error);
   }
 }

@@ -2,19 +2,19 @@ import { TagIcon, ClockIcon, SparklesIcon } from "@heroicons/react/24/outline";
 import ProductCarousel from "@/components/reusable/ProductCarousel";
 import { useQuery } from "@tanstack/react-query";
 import { getOffersPerTopCategories } from "../services/homeService";
-import { Navigate } from "react-router-dom";
 import LoadingWebSite from "@/components/reusable/LoadingWebSite";
+import { useQueryErrorHandler } from "@/hooks/useQueryErrorHandler";
 
 export default function OffersView() {
-  const { data, isLoading, isError } = useQuery({
+  const { data, isLoading, error } = useQuery({
     queryKey: ["getOffersPerTopCategories"],
     queryFn: getOffersPerTopCategories,
     retry: false,
   });
 
-  if (isLoading) return <LoadingWebSite />;
+  useQueryErrorHandler(error);
 
-  if (isError) return <Navigate to={"/404"} />;
+  if (isLoading) return <LoadingWebSite />;
 
   const firstOfferProducts = data!.slice(0, 3);
   const remainingOfferProducts = data!.slice(3);

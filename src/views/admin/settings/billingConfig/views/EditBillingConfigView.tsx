@@ -1,25 +1,26 @@
 import { useQuery } from "@tanstack/react-query";
-import { Navigate, useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { getBillingConfig } from "../services/billingConfigService";
 import EditBillingConfigForm from "../components/EditBillingConfigForm";
 import { DocumentTextIcon, ArrowLeftIcon } from "@heroicons/react/24/outline";
 import LoadingAdminSite from "@/components/reusable/LoadingAdminSite";
+import { useQueryErrorHandler } from "@/hooks/useQueryErrorHandler";
 
 export default function EditBillingConfigView() {
   const params = useParams();
   const navigate = useNavigate();
   const configId = params.configId!;
 
-  const { data, isLoading, isError } = useQuery({
+  const { data, isLoading, error } = useQuery({
     queryKey: ["getBillingConfig", configId],
     queryFn: () => getBillingConfig(configId),
     retry: false,
     enabled: !!configId, // Solo corre si hay ID válido
   });
 
-  if (isLoading) return <LoadingAdminSite />;
+  useQueryErrorHandler(error);
 
-  if (isError) return <Navigate to="/404" />;
+  if (isLoading) return <LoadingAdminSite />;
 
   if (data)
     return (

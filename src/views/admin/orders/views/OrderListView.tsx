@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { getOrders } from "../services/orderService";
 import {
   PlusIcon,
@@ -12,6 +12,7 @@ import { formatCurrency } from "@/shared/utils";
 import { usePagination } from "../../../../hooks/usePagination";
 import LoadingAdminSite from "@/components/reusable/LoadingAdminSite";
 import Pagination from "@/components/reusable/Pagination";
+import { useQueryErrorHandler } from "@/hooks/useQueryErrorHandler";
 
 export default function OrderListView() {
   //Paginacion
@@ -21,7 +22,7 @@ export default function OrderListView() {
   // PAGINACIÓN
   const { page, limit, setPage, setLimit } = usePagination();
 
-  const { data, isLoading, isError } = useQuery({
+  const { data, isLoading, error } = useQuery({
     queryKey: ["orders", page, limit],
     queryFn: () => getOrders(page, limit),
     retry: false,
@@ -35,9 +36,9 @@ export default function OrderListView() {
     }
   }, [data, page, setPage]);
 
-  if (isLoading) return <LoadingAdminSite />;
+  useQueryErrorHandler(error);
 
-  if (isError) return <Navigate to="/404" />;
+  if (isLoading) return <LoadingAdminSite />;
 
   if (data)
     return (

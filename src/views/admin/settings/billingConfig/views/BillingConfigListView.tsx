@@ -1,4 +1,4 @@
-import { Navigate, useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import {
   PlusIcon,
   PencilIcon,
@@ -10,20 +10,21 @@ import { useQuery } from "@tanstack/react-query";
 import { getBillingConfigs } from "../services/billingConfigService";
 import CreateBillingConfigModal from "../components/CreateBillingConfigModal";
 import LoadingAdminSite from "@/components/reusable/LoadingAdminSite";
+import { useQueryErrorHandler } from "@/hooks/useQueryErrorHandler";
 
 export default function BillingConfigListView() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { data, isError, isLoading } = useQuery({
+  const { data, error, isLoading } = useQuery({
     queryKey: ["billingConfigs"],
     queryFn: getBillingConfigs,
     retry: false,
   });
 
-  if (isLoading) return <LoadingAdminSite />;
+  useQueryErrorHandler(error);
 
-  if (isError) return <Navigate to={"/404"} />;
+  if (isLoading) return <LoadingAdminSite />;
 
   if (data)
     return (
